@@ -1,4 +1,9 @@
 ncaa<-read.csv("RegularSeasonDetailedResults.csv",header=TRUE)
+#write a CSV of data without neutral sites
+ncaa$WinLoss <- ifelse(ncaa$Wloc == "H",1,0)
+
+
+#
 teams<-read.csv("Teams.csv",header=TRUE)
 ncaa$Season<-as.factor(ncaa$Season)
 length(levels(as.factor(ncaa$Wteam))) #355 teams
@@ -12,6 +17,7 @@ for(i in 1:nrow(ncaa)) {
   } else(ncaa$Numot[i]<-0)
 }
 ncaa$ot<-as.factor(ncaa$Numot)
+
 
 length(which(teams$Team_Id %in% ncaa$Wteam))
 length(which(teams$Team_Id %in% ncaa$Lteam))
@@ -30,7 +36,7 @@ ncaa.final<-data.frame(team=ncaa[,36],ncaa[,-c(2,8:36)],ot=ncaa[,35],
                        trdiff=(ncaa[,15]+ncaa[,16])-(ncaa[,28]+ncaa[,29]),
                        astdiff=ncaa[,17]-ncaa[,30],tdiff=ncaa[,18]-ncaa[,31],
                        sdiff=ncaa[,19]-ncaa[,32],blkdiff=ncaa[,20]-ncaa[,33],
-                       pfdiff=ncaa[,21]-ncaa[,34])
+                       pfdiff=ncaa[,21]-ncaa[,34],WinLoss = ncaa[,35])
 
 write.csv(ncaa.final, "ncaa.final.csv")
 
