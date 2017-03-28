@@ -29,14 +29,15 @@ ncaa <- merge(ncaa,teams, by = "Team_Id")[,-1]
 
 #some slight cleaning
 #create differentials
-ncaa.final<-data.frame(team=ncaa[,36],ncaa[,-c(2,8:36)],ot=ncaa[,35],
+ncaa.final<-data.frame(team=ncaa[,37],ncaa[,-c(2,8:37)],winloss=ncaa[,35],
+                       ot=ncaa[,36],
                        wfgp=ncaa[,9]/ncaa[,10],lfgp=ncaa[,22]/ncaa[,23],
                        w3p=ncaa[,11]/ncaa[,12],l3p=ncaa[,24]/ncaa[,25],
                        wftp=ncaa[,13]/ncaa[,14],lftp=ncaa[,26]/ncaa[,27],
                        trdiff=(ncaa[,15]+ncaa[,16])-(ncaa[,28]+ncaa[,29]),
                        astdiff=ncaa[,17]-ncaa[,30],tdiff=ncaa[,18]-ncaa[,31],
                        sdiff=ncaa[,19]-ncaa[,32],blkdiff=ncaa[,20]-ncaa[,33],
-                       pfdiff=ncaa[,21]-ncaa[,34],WinLoss = ncaa[,35])
+                       pfdiff=ncaa[,21]-ncaa[,34])
 
 write.csv(ncaa.final, "ncaa.final.csv")
 
