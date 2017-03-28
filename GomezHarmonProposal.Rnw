@@ -39,11 +39,24 @@ Naturally, methods for accurately picking winners and losers of college basketba
 
 
 \section{Data Set Description}
-The data were obtained from a repository on Kaggle.com related to the March Machine Learning Mania competition in 2016. A great deal of information was originally pulled down, much more than we could ever use in any meaningful way. In the end, we have settled on sixteen variables to include in our study. Perhaps the most important variable is our response variable of whether or not the home team won or not. Our data set contains more than !!! games spanning fourteen seasons of basketball. Team rosters are continuously changing as students enter and leave programs for a myriad of reasons. This leads to teams being relatively unchanged within a single year, but year to year we could see very different teams, so it seems to make sense to account for this behind the scenes shift by adding a season variable to our model. Whether or not a game goes into overtime is also a variable of interest as it may provide some insight into the level of competition between the teams; games that go into overtime likely involve more evenly matched teams than those that do not, and thus the probability of the home team winning may be close to 50\%. From there, our data consists of performance statistics for both teams summarized as either percentages or differentials. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams. All percentages were calculated as the number of made shots divided by the number of atempted shots. Next, are our differentials. We will be considering total rebounds, 
-
-The response variable is binary (teams either won or lost games) and there were several covariates of interest. Prior to the analysis, we re-coded variables so that the covariates were based on ratios rather than raw counts (for example, Free Throw Shooting Percentage) as well as considering differentials between winning and losing teams. The variables considered are below. Please see the dataset that is attached to this document to see the raw data.
+The data were obtained from a repository on Kaggle.com related to the March Machine Learning Mania competition in 2016. A great deal of information was originally pulled down, much more than we could ever use in any meaningful way. In the end, we have settled on fourteen predictor variables to include in our study of our single response: whether the home team won or not. Our data set contains more than sixty-four thousand games spanning fourteen seasons of basketball. Team rosters are continuously changing as students enter and leave programs for a myriad of reasons. This leads to teams being relatively unchanged within a single year, but year to year we could see very different teams, so it seems to make sense to account for this behind the scenes shift by adding a season variable to our model. Whether or not a game goes into overtime is also a variable of interest as it may provide some insight into the level of competition between the teams; games that go into overtime likely involve more evenly matched teams than those that do not, and thus the probability of the home team winning may be close to 50\%. To get an idea for how many points winning teams might need to put up in a typical game, we will also include the winning team's score.From there, our data consists of performance statistics for both teams summarized as either percentages or differentials. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams. All percentages were calculated as the number of made shots divided by the number of atempted shots. Next, are our differentials. We will be considering total rebounds (offensive rebounds plus defenseive rebounds), assists, turnovers, steals, blocks, and personal fouls when calculating these differentials, and we will always subtract the losing team's game statistics from the winning team's (winner-loser). Altogther in this data set, we
 
 \section{Goals and Questions of Interest}
+We are interested in determining the factors that influence the outcomes of college basketball games in order to predict which teams are more likely to win a matchup. The key questions of interest are as follows.
+
+\begin{enumerate}
+\item %1
+Does home court advantage influence the outcome of a game, after controlling for on-court performance factors?
+
+\item %2
+Do winning teams turn the ball over less than losing teams?
+
+\item %3
+Do any of the variables measured modify the effect of other covariates of interest?
+
+\end{enumerate}
+
+The key goal of the analysis is to create a good predictive model that can, with some reasonable degree of accuracy, generate predictions as to whether a team will win or lose a game.  We plan to break the dataset into training and testing sets in order to assess the quality of predictions.  Since the data pertain to multiple seasons, the training and testing sets are going to be chosen using a stratified random sampling method that evenly samples games form each season. 
 
 \section{Preliminary Data Exploartion}
 
