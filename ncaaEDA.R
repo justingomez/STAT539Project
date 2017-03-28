@@ -1,5 +1,8 @@
 ncaa<-read.csv("RegularSeasonDetailedResults.csv",header=TRUE)
+ncaa<-ncaa[ncaa$Wloc!="N",]
+write.csv(ncaa,"inter.csv")
 #write a CSV of data without neutral sites
+ncaa<-read.csv("inter.csv",header=TRUE)[,-1]
 ncaa$WinLoss <- ifelse(ncaa$Wloc == "H",1,0)
 
 
