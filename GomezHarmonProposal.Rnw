@@ -62,4 +62,26 @@ The key goal of the analysis is to create a good predictive model that can, with
 
 \section{Analysis Plan and Modeling}
 
+Since the response of interest is binary, we will focus on methods designed for binary regression models. We plan on using logistic regression to analyze the data. 
+
+The choice of link function is not one that we have decided on yet; choosing between a logit link or a probit link may be one of the key questions we answer during the analysis. In some ways, the logit makes sense because we could interpret the direct change in the odds of winning given a change in one of the covariates. However, the probit might be worth looking into as well. We might be able to think of a basketball game as the realization of some underlying latent process where winning is the result of a high (or possibly positive) score on the latent index. 
+
+In any case, the plan for modeling this be as follows. We will fit models with the response, whether or not the home team won, and determine which combinations of covariates form the most parsimonious model. We can then start to use that model to assess the research questions we came up with. For each of the research questions we have:
+
+\begin{enumerate}
+\item %1
+Based on the structure of the response (home games won), probably the best way to assess this question would be to fit models and make predictions. We have split our data into training and testing sets, so we can get an idea for whether or not home teams are more likely to win than road teams. 
+
+\item %2
+The turnover differential term will be retained in the model, since it is a specific question we want to answer. We will perform hypothesis tests and confidence intervals for the effect of turnover differential on the probability of winning a game. 
+
+\item %3
+Including interaction terms in the model and comparing to main-effects only models will allow us to examine whether or not effect modifiers are indeed present in the data. Because there are so many covariates that can interact, we will first try to identify only a few possible interactions that we are interested in studying. 
+
+\end{enumerate
+
+The model fitting should not be overly complicated in this analysis. The final step will include using the testing set to determine whether the predictive logisitic model we created is effective for predicting the outcome of a college basketball game. 
+
+
+
 \end{document}
