@@ -7,9 +7,10 @@
 \usepackage{fancyhdr}
 \usepackage{setspace}
 \usepackage{titlesec}
+\usepackage{caption}
 \pagestyle{fancy}
-\lhead{Gomez, Harmon}
-\chead{STAT 539, Data Analysis Proposal}
+\lhead{Justin Gomez, Paul Harmon}
+\chead{Data Analysis Proposal}
 \rhead{March 30, 2017}
 \setlength{\headheight}{20pt}
 \renewcommand{\headrulewidth}{0.2pt}
@@ -23,11 +24,6 @@ library(knitr)
 opts_chunk$set(results='markup',message=FALSE,background='white', comment=NA,warning=FALSE,tidy=TRUE,fig.height=4,fig.width=6)
 @
 
-\title{STAT 539, Data Analysis Proposal}
-\author{Justin Gomez. Paul Harmon}
-\date{3/28/2017}
-\maketitle
-
 \doublespacing
 
 \section{Background}
@@ -39,7 +35,7 @@ Naturally, methods for accurately picking winners and losers of college basketba
 
 
 \section{Data Set Description}
-The data were obtained from a repository on Kaggle.com related to the March Machine Learning Mania competition in 2016. A great deal of information was originally pulled down, much more than we could ever use in any meaningful way. In the end, we have settled on fourteen predictor variables to include in our study of our single response: whether the home team won or not. Our data set contains more than sixty-four thousand games spanning fourteen seasons of basketball. Team rosters are continuously changing as students enter and leave programs for a myriad of reasons. This leads to teams being relatively unchanged within a single year, but year to year we could see very different teams, so it seems to make sense to account for this behind the scenes shift by adding a season variable to our model. Whether or not a game goes into overtime is also a variable of interest as it may provide some insight into the level of competition between the teams; games that go into overtime likely involve more evenly matched teams than those that do not, and thus the probability of the home team winning may be close to 50\%. To get an idea for how many points winning teams might need to put up in a typical game, we will also include the winning team's score.From there, our data consists of performance statistics for both teams summarized as either percentages or differentials. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams. All percentages were calculated as the number of made shots divided by the number of atempted shots. Next, are our differentials. We will be considering total rebounds (offensive rebounds plus defenseive rebounds), assists, turnovers, steals, blocks, and personal fouls when calculating these differentials, and we will always subtract the losing team's game statistics from the winning team's (winner-loser). Altogther in this data set, we
+The data were obtained from a repository on Kaggle.com related to the March Machine Learning Mania competition in 2016. A great deal of information was originally pulled down, much more than we could ever use in any meaningful way. In the end, we have settled on fourteen predictor variables to include in our study of our single response: whether the home team won or not. Our data set contains more than sixty-four thousand games spanning fourteen seasons of basketball. Team rosters are continuously changing as students enter and leave programs for a myriad of reasons. This leads to teams being relatively unchanged within a single year, but year to year we could see very different teams, so it seems to make sense to account for this behind the scenes shift by adding a season variable to our model. Whether or not a game goes into overtime is also a variable of interest as it may provide some insight into the level of competition between the teams; games that go into overtime likely involve more evenly matched teams than those that do not, and thus the probability of the home team winning may be close to 50\%. To get an idea for how many points winning teams might need to put up in a typical game, we will also include the winning team's score.From there, our data consists of performance statistics for both teams summarized as either percentages or differentials. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams. All percentages were calculated as the number of made shots divided by the number of atempted shots. Next, are our differentials. We will be considering total rebounds (offensive rebounds plus defenseive rebounds), assists, turnovers, steals, blocks, and personal fouls when calculating these differentials, and we will always subtract the losing team's game statistics from the winning team's (winner-loser).
 
 \section{Goals and Questions of Interest}
 We are interested in determining the factors that influence the outcomes of college basketball games in order to predict which teams are more likely to win a matchup. The key questions of interest are as follows.
@@ -59,6 +55,27 @@ Do any of the variables measured modify the effect of other covariates of intere
 The key goal of the analysis is to create a good predictive model that can, with some reasonable degree of accuracy, generate predictions as to whether a team will win or lose a game.  We plan to break the dataset into training and testing sets in order to assess the quality of predictions.  Since the data pertain to multiple seasons, the training and testing sets are going to be chosen using a stratified random sampling method that evenly samples games form each season. 
 
 \section{Preliminary Data Exploartion}
+Before building any models or jumping into the heavy analysis, we can create several plots that give us some insight into the data. Understanding the existing structure (or lack of) within our predictors may help us decide how to incorporate variables in our model, if at all. To get at these relationships, a simple correlation matrix has been calculated and summarized in Figure~\ref{fig:corr}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.7\textwidth]{correlations.jpeg}
+\captionsetup{font=footnotesize,labelfont=footnotesize}
+\caption{\label{fig:corr} \textbf{Correlation plot for the set of predictors. Size and color of the square gives a general idea of the size and direction of the relationship while the lower triangle gives actual values.}}
+\end{figure}
+
+While many relationship's aren't as strong as we initially expected, ther aren't many surprises in this plot. Field goal percentage and three-point percentage are fairly strongly correlated for winning and losing teams, which makes sense as three-pointers are a subset of overall field goals. We also see a large negative correlation between turnover differential and steal differential, which is expected as the winning team should turn the ball over less, but steal the ball more. With this information, we might be able to justify leaving out a variable or two, but for the most part, the low correlations present between this set of variables indicate that including all variables in a model initially isn't a bad idea.\\
+
+We can also examine a series of plots that examine the differentials specifically and how they relate to whether the home team won or not in Figure~\ref{fig:diff}.\\
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.7\textwidth]{differentials.jpeg}
+\captionsetup{font=footnotesize,labelfont=footnotesize}
+\caption{\label{fig:diff} \textbf{Plots of the five differential variables being considered as predictors. Proportions of wins are evaluated for winning teams with positive and negative differentials on each variable. Differentials found as winning minus losing.}}
+\end{figure}
+
+???
 
 \section{Analysis Plan and Modeling}
 
