@@ -25,6 +25,7 @@ opts_chunk$set(results='markup',message=FALSE,background='white', comment=NA,war
 @
 
 \doublespacing
+\linespread{0}
 
 \section{Background}
 NCAA College Basketball, including the regular season and the NCAA tournament, is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. Naturally, methods for accurately picking winners and losers of college basketball games are of interest for several reasons for fans and coaches alike. This analysis instead focuses mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given basketball game.\\
