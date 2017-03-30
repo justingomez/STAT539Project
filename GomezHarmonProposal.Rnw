@@ -27,7 +27,7 @@ opts_chunk$set(results='markup',message=FALSE,background='white', comment=NA,war
 \doublespacing
 
 \section{Background}
-NCAA College Basketball, including the regular season and the NCAA tournament, is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. Naturally, methods for accurately picking winners and losers of college basketball games are of interest for several reasons for fans and coaches alike. This analysis instead focuses mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given basketball game.\\
+NCAA College Basketball is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. Naturally, methods for accurately picking winners and losers of college basketball games are of interest for several reasons for fans and coaches alike. This analysis instead focuses mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given game.\\
 
 
 \section{Data Set Description}
@@ -37,6 +37,7 @@ The data were obtained from a repository on Kaggle.com related to the March Mach
 We are interested in determining the factors that influence the outcomes of college basketball games in order to predict which teams are more likely to win a matchup. The key questions of interest are as follows.
 
 \begin{enumerate}
+\itemsep0em
 \item %1
 Does home court advantage influence the outcome of a game, after controlling for on-court performance factors?
 
@@ -48,10 +49,10 @@ Do any of the variables measured modify the effect of other covariates of intere
 
 \end{enumerate}
 
-The key goal of the analysis is to create a good predictive model that can, generate predictions as to whether a team will win or lose a game.  We plan to break the dataset into training and testing sets in order to assess the quality of predictions.  Since the data pertain to multiple seasons, the training and testing sets are going to be chosen using a stratified random sampling method that evenly samples games form each season. 
+The key goal of the analysis is to create a good predictive model that can generate predictions as to whether a team will win or lose a game.  We plan to break the dataset into training and testing sets in order to assess the quality of predictions.  Since the data pertain to multiple seasons, the training and testing sets are going to be chosen using a stratified random sampling method that evenly samples games form each season. 
 
 \section{Preliminary Data Exploartion}
-Before building any models or jumping into the heavy analysis, we can create several plots that give us some insight into the data. Understanding the existing structure (or lack of) within our predictors may help us decide how to incorporate variables in our model, if at all. To get at these relationships, a simple correlation matrix has been calculated and summarized in Figure~\ref{fig:corr}.
+Before building any models or jumping into the heavy analysis, we can create several plots that give us some insight into the data. Understanding the existing structure of the predictors may help us decide how to incorporate variables in our model. To get at these relationships, a correlation matrix has been calculated and summarized in Figure~\ref{fig:corr}.
 
 \begin{figure}[h]
 \centering
@@ -60,9 +61,7 @@ Before building any models or jumping into the heavy analysis, we can create sev
 \caption{\label{fig:corr} \textbf{Correlation plot for the set of predictors. Size and color of the square gives a general idea of the size and direction of the relationship while the lower triangle gives actual values.}}
 \end{figure}
 
-While many relationships are not as strong as we initially expected, there are not many surprises in this plot. Field goal percentage and three-point percentage are fairly strongly correlated for winning and losing teams, which makes sense as three-pointers are a subset of overall field goals. We also see a large negative correlation between turnover differential and steal differential, which is expected as the winning team should turn the ball over less, but steal the ball more. With this information, we might be able to justify leaving out a variable or two, but for the most part, the low correlations present between this set of variables indicate that including all variables in a model initially isn't a bad idea.\\
-
-We can also examine a series of plots that examine the differentials specifically and how they relate to whether the home team won or not in Figure~\ref{fig:diff}. 
+While many relationships are not as strong as we initially expected, there are not many surprises in this plot. Field goal percentage and three-point percentage are fairly strongly correlated for winning and losing teams. We also see a large negative correlation between turnover differential and steal differential, which is expected as the winning team should turn the ball over less, but steal the ball more. The low correlations present between this set of variables suggest starting with a model that includes all variables. We can also examine a series of plots that examine the differentials specifically and how they relate to whether the home team won or not in Figure~\ref{fig:diff}. 
 
 \begin{figure}[h]
 \centering
@@ -71,7 +70,7 @@ We can also examine a series of plots that examine the differentials specificall
 \caption{\label{fig:diff} \textbf{Plots of the five differential variables being considered as predictors. Proportions of wins are evaluated for winning teams with positive and negative differentials on each variable. Differentials found as winning minus losing.}}
 \end{figure}
 
-These plots show the proportion of games won for teams that had a negative differential vs. a positive differential. For offensive statistics, such as assists, steals, and blocks, teams that had a positive differential were more likely to win. This makes sense; a team with a positive assist differential had more assists than the other team, so it is likely that they ought to have scored more points than the other team as well. Not surprisingly, teams with negative turnover differentials were actually more likely to win than teams with positive turnover differentials (because they turned the ball over fewer times than their opponent) and teams that fouled less were more likely to win. These plots ought to inform some intuition about the direction of the coefficients estimated in the binary regression. \\
+The above plots show the proportion of wins vs each differential; they inform some intuition about the direction of the estimated coefficients. Teams that had more assists, steals and blocks than their opponent were more likely to win.  Not surprisingly, teams with negative turnover differentials were more likely to win than teams with positive turnover differentials (because they turned the ball over fewer times than their opponent) and teams that fouled less were more likely to win.  \\
 
 
 \section{Analysis Plan and Modeling}
@@ -80,7 +79,7 @@ We plan on using logistic regression to analyze the data. The choice of link fun
 \end{enumerate}
 
 The model fitting should not be overly complicated in this analysis. The final step will include using the testing set to determine whether the predictive logisitic model we created is effective for predicting the outcome of a college basketball game. 
-
+\pagebreak
 \section{Sources}
 Smith, D. Randall. (2008) Big Time College Basketball and the Advertising Effect: Does Success Really Matter? Journal of Sports Economics Volume 9 No. 4 pp 387-406.
 
