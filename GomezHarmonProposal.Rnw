@@ -27,7 +27,7 @@ opts_chunk$set(results='markup',message=FALSE,background='white', comment=NA,war
 \doublespacing
 
 \section{Background}
-NCAA College Basketball, including the regular season and the NCAA tournament, is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. Naturally, methods for accurately picking winners and losers of college basketball games are of interest for several reasons for fans and coaches alike. While much work has been done in the field of predictive analytics related to the NCAA tournament, much focus is placed on "black box" predictive algorithms or complex regression schemes. This analysis instead focuses mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given basketball game.\\
+NCAA College Basketball, including the regular season and the NCAA tournament, is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. Naturally, methods for accurately picking winners and losers of college basketball games are of interest for several reasons for fans and coaches alike. This analysis instead focuses mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given basketball game.\\
 
 
 \section{Data Set Description}
@@ -74,18 +74,7 @@ We can also examine a series of plots that examine the differentials specificall
 
 \section{Analysis Plan and Modeling}
 
-We will focus on methods designed for binary regression models. We plan on using logistic regression to analyze the data. The choice of link function is not one that we have decided on yet; choosing between a logit link or a probit link may be one of the key questions we answer. The logit makes sense because we could interpret the direct change in the odds of winning given a change in one of the covariates. However, the probit might be worth looking into as well. We could think of the outcome of a basketball game as being the result of some underlying latent index of player performance. 
-
-In any case, the plan for modeling this be as follows. We will fit models with the response, whether or not the home team won, and determine which combinations of covariates form the most parsimonious model. We can then start to use that model to assess the research questions we came up with:
-
-\begin{enumerate}
-\item %1
-Based on the structure of the response (home games won), probably the best way to assess this question would be to fit models and make predictions. We plan to fit models on a training set and test on validation set. 
-
-\item %2
-The turnover differential term will be retained in the model, since it is a specific question we want to answer. We will perform hypothesis tests and confidence intervals for the effect of turnover differential on win probability.
-\item %3
-Testing for effect modifiers would be done by including interaction terms in the model. It might be interesting to see if the effects of covariates on the probability of winning are the same in games that go to overtime vs. those that do not.  
+We will focus on methods designed for binary regression models. We plan on using logistic regression to analyze the data. The choice of link function is not one that we have decided on yet; choosing between a logit link or a probit link may be one of the key questions we answer. The logit makes sense because we could interpret the direct change in the odds of winning given a change in one of the covariates. However, the probit might be worth looking into as well. We could think of the outcome of a basketball game as being the result of some underlying latent index of player performance.  We plan to start by fitting a model to assess the research questions we came up with. For question one, probably the best way to assess this question would be to fit models and make predictions. We plan to fit models on a training set and test on validation set. For question two, the turnover differential term in the model can be assessed with hypothesis tests and confidence intervals. Finally for question three, it might be interesting to see if the effects of covariates on the probability of winning are the same in games that go to overtime vs. those that do not.  
 
 \end{enumerate}
 
