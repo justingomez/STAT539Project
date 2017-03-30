@@ -62,7 +62,7 @@ Before building any models or jumping into the heavy analysis, we can create sev
 
 While many relationships are not as strong as we initially expected, there are not many surprises in this plot. Field goal percentage and three-point percentage are fairly strongly correlated for winning and losing teams, which makes sense as three-pointers are a subset of overall field goals. We also see a large negative correlation between turnover differential and steal differential, which is expected as the winning team should turn the ball over less, but steal the ball more. With this information, we might be able to justify leaving out a variable or two, but for the most part, the low correlations present between this set of variables indicate that including all variables in a model initially isn't a bad idea.\\
 
-We can also examine a series of plots that examine the differentials specifically and how they relate to whether the home team won or not in Figure~\ref{fig:diff}. These plots show the proportion of games won for teams that had a negative differential vs. a positive differential. For offensive statistics, such as assists, steals, and blocks, teams that had a positive differential were more likely to win. This makes sense; a team with a positive assist differential had more assists than the other team, so it is likely that they ought to have scored more points than the other team as well. Not surprisingly, teams with negative turnover differentials were actually more likely to win than teams with positive turnover differentials (because they turned the ball over fewer times than their opponent) and teams that fouled less were more likely to win. These plots ought to inform some intuition about the direction of the coefficients estimated in the binary regression. \\
+We can also examine a series of plots that examine the differentials specifically and how they relate to whether the home team won or not in Figure~\ref{fig:diff}. 
 
 \begin{figure}[h]
 \centering
@@ -70,6 +70,8 @@ We can also examine a series of plots that examine the differentials specificall
 \captionsetup{font=footnotesize,labelfont=footnotesize}
 \caption{\label{fig:diff} \textbf{Plots of the five differential variables being considered as predictors. Proportions of wins are evaluated for winning teams with positive and negative differentials on each variable. Differentials found as winning minus losing.}}
 \end{figure}
+
+These plots show the proportion of games won for teams that had a negative differential vs. a positive differential. For offensive statistics, such as assists, steals, and blocks, teams that had a positive differential were more likely to win. This makes sense; a team with a positive assist differential had more assists than the other team, so it is likely that they ought to have scored more points than the other team as well. Not surprisingly, teams with negative turnover differentials were actually more likely to win than teams with positive turnover differentials (because they turned the ball over fewer times than their opponent) and teams that fouled less were more likely to win. These plots ought to inform some intuition about the direction of the coefficients estimated in the binary regression. \\
 
 
 \section{Analysis Plan and Modeling}
