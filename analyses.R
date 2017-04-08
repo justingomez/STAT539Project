@@ -76,7 +76,38 @@ title("Block Differential")
 
 
 
-###some cha cha cha changes that Paul is going to make
+###lets fit some mutha@$%@#$%@ing models yo
+
+
+#additive model
+model1 <- glm(winloss ~ factor(ot) + wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff, family = binomial(link = "logit"), data = train)
+summary(model1)
+
+mean(resid(model1, type = "pearson")^2) #damn this looks as good as I've ever seen in my statistical career
+
+
+#interactive model (interacted with the differentials)
+model2 <- glm(winloss ~ wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
+summary(model2)
+ 
+mean(resid(model2, type = "pearson")^2)
+
+#neither model appears to have a problem with overdispersoin
+
+
+#Don't try to fit the full interaction model
+
+
+#lets try fitting a random effect, but I can't get this to work right. Screw it
+library(MASS); library(lme4)
+model1 <- lmer(fixed = winloss ~ factor(ot) + wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff, family = binomial(link = "logit"), random = ~1|Season, data = train)
+summary(model1)
+
+
+
+
+
+
 
 
 

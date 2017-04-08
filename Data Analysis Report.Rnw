@@ -1,4 +1,21 @@
-\documentclass{article}
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{caption}
+\pagestyle{fancy}
+\lhead{Justin Gomez, Paul Harmon}
+\chead{Data Analysis Proposal}
+\rhead{March 30, 2017}
+\setlength{\headheight}{20pt}
+\renewcommand{\headrulewidth}{0.2pt}
+\renewcommand{\footrulewidth}{0.2pt}
+\setlength{\parindent}{0pt}
 
 }
 
@@ -7,18 +24,23 @@
 \begin{abstract}
 College Basketball, including the NCAA Tournament, is growing in popularity and scope across the country. Winnng programs benefit from increased exposure, funding opportunities, and prestige. It is often of interest to try to predict which statistics are most strongly associated with winning a game. In order to analyze this, we fit binary regression models to analyze data from 49844 college basketball games since the 2003 season in order to determine which variables were most strongly associated with the probability of the home team winning. 
 
-Results indicated that 
+Results indicated that... 
 \end{abstract
 
 \section{Introduction}
 \subsection{College Basketball: A Growing Sport}
-NCAA College Basketball is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. \\
+NCAA College Basketball is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. It is therefore of interest to not only coaches and fans but also campus administrators to determine which factors are most associated with winning basketball games. \\
 
 \subsection{Predictive Analytics in NCAA Basketball}
 Fans watching the NCAA Tournament are increasingly interested in making bets by filling out brackets, predicting each winner in the 7 rounds of the tournament; this has led to a proliferation of predictive modeling in College Basketball, both academic and casual. Some methods like those used by Harville and Smith (1992) make use of linear models to predict outcomes of games; however, more recent focus has been on so-called 'black box' predictive analytics.  While these are useful for simply predicting winners, these do not have much utility for inference; that is, they do not inform much about the factors that are most strongly associated with the probability of winning a game.  This analysis is focused more on identifying metrics that are associated with the probabiliity of a team winning a game; therefore, we use generalized linear models to analzye the data. This analysis focuses mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given game.
 
 \section{Data and Methods}
+
 \subsection{The Data}
+The data were obtained from a repository on Kaggle.com related to the March Machine Learning Mania competition in 2016. We settled on a reduced set of fourteen predictor variables to include in our study of our single binary response: whether the home team won or not. Our dataset contains more than sixty-four thousand games spanning fourteen seasons of basketball. Since so much changes from year to year, including the season as a predictor may add useful information. Whether or not a game goes into overtime is also a variable of interest as it may provide some insight into the level of competition between the teams.To get an idea for how many points winning teams might need to put up in a typical game, we will also include the winning team's score. 
+
+Our data consist of performance statistics for both teams summarized as either percentages or differentials. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams. These are seperate variables for each team. All percentages were calculated as the number of made shots divided by the number of attempted shots. The differentials refer to the total count for the home team subtracted by the total count for the other team. We will be considering total rebounds (offensive rebounds plus defensive rebounds), assists, turnovers, steals, blocks, and personal fouls.  For instance, a positive rebound differential means that the winning team had more total rebounds than the losing team; a negative value would imply the opposite.  
+
 \subsection{Generalized Linear Models}
 \subsection{Link Functions}
 
