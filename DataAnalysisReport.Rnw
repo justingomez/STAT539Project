@@ -33,7 +33,26 @@ Results indicated that...
 NCAA College Basketball is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. It is therefore of interest to not only coaches and fans but also campus administrators to determine which factors are most associated with winning basketball games. \\
 
 \subsection{Predictive Analytics in NCAA Basketball}
-Fans watching the NCAA Tournament are increasingly interested in making bets by filling out brackets, predicting each winner in the 7 rounds of the tournament; this has led to a proliferation of predictive modeling in College Basketball, both academic and casual. Some methods like those used by Harville and Smith (1992) make use of linear models to predict outcomes of games; however, more recent focus has been on so-called 'black box' predictive analytics.  While these are useful for simply predicting winners, these do not have much utility for inference; that is, they do not inform much about the factors that are most strongly associated with the probability of winning a game.  This analysis is focused more on identifying metrics that are associated with the probabiliity of a team winning a game; therefore, we use generalized linear models to analzye the data. This analysis focuses mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given game.
+Fans watching the NCAA Tournament are increasingly interested in making bets by filling out brackets, predicting each winner in the 7 rounds of the tournament; this has led to a proliferation of predictive modeling in College Basketball, both academic and casual. Some methods like those used by Harville and Smith (1992) make use of linear models to predict outcomes of games; however, more recent focus has been on so-called 'black box' predictive analytics.  While these are useful for simply predicting winners, these do not have much utility for inference; that is, they do not inform much about the factors that are most strongly associated with the probability of winning a game.  
+
+This analysis is focused more on identifying metrics that are associated with the probabiliity of a team winning a game; therefore, we use generalized linear models to analzye the data. This analysis focuses mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given game. The main questions of interest as are follows: 
+
+\begin{enumerate}
+\itemsep0em
+\item %1
+Which factors are most important in helping a home team win a game?
+
+\item %2
+Are winning teams more likely to win the turnover battle? 
+
+\item %3
+Do any of the variables measured modify the effect of other covariates of interest?
+
+\end{enumerate}
+
+
+
+Although the main goal of this analysis is to do statsitical inference, we do intend to test the predictive ability of our final model by generating predictions of wins and losses and comparing our predictions to a testing data set. 
 
 
 
@@ -91,7 +110,14 @@ The response in this analysis is binary; either the home team won the game and i
 
 \section{Results}
 
+
 \section{Discussion}
+\subsection{Logistic Regression}
+The results on 
+
+\subsection{}
+
+
 
 \section{Appendix}
 
