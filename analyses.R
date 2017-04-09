@@ -127,7 +127,17 @@ summary(model1)
 
 
 
+##Training Testing Split
 
+MSE <- function(pred, obs) {mean((pred - obs)^2)}
+
+test <- read.csv("test.csv", header = TRUE)
+test<- test[-c(3239,5069),-c(1,2)]
+which(is.na(test$lftp) == TRUE)
+
+
+
+plot(predict(model2))
 
 
 

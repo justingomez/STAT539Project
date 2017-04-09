@@ -10,17 +10,18 @@
 \usepackage{caption}
 \pagestyle{fancy}
 \lhead{Justin Gomez, Paul Harmon}
-\chead{Data Analysis Proposal}
+\chead{Data Analysis Report}
 \rhead{March 30, 2017}
 \setlength{\headheight}{20pt}
 \renewcommand{\headrulewidth}{0.2pt}
 \renewcommand{\footrulewidth}{0.2pt}
 \setlength{\parindent}{0pt}
 
-}
 
 \begin{document}
-\maketitle
+
+
+
 \begin{abstract}
 College Basketball, including the NCAA Tournament, is growing in popularity and scope across the country. Winnng programs benefit from increased exposure, funding opportunities, and prestige. It is often of interest to try to predict which statistics are most strongly associated with winning a game. In order to analyze this, we fit binary regression models to analyze data from 49844 college basketball games since the 2003 season in order to determine which variables were most strongly associated with the probability of the home team winning. 
 
@@ -49,7 +50,24 @@ The table below lists the variables, each type, and the the manner in which they
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
-new line & newcell & newcell &
+Variable Name & Type & Nickname & How Calculated
+Season& Year& Season& Year Played
+Lscore&&&
+Overtime&&&
+Winning Field Goal Pct&&&
+Losing Field Goal Pct&&&
+Winning 3 Point Pct&&&
+Losing 3 Point Pct&&&
+Winning Free Throw Pct&&&
+Losing Free Throw Pct&&&
+Turnover Differential&&&
+Assist Differential&&&
+Steal Differential&&&
+Block Differential&&&
+Personal Foul Differential& & &
+&&&
+&&&
+
 
 \end{tabular}
 \caption{}
@@ -68,12 +86,11 @@ The response in this analysis is binary; either the home team won the game and i
 \section{Appendix}
 
 <<freakingdataanalysis, include = FALSE>>=
-
+#model
 
 @
 
 
-\section{}
 
 
 
