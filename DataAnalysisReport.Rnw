@@ -109,7 +109,13 @@ Total Rebound Differential &DIFF&TRDIFF& Winning Team Rebounds - Losing Team Reb
 
 
 \subsection{Generalized Linear Models}
-The response in this analysis is binary; either the home team won the game and is assigned a value of "1" or the home team lost the game, in which case it is assigned a "0". 
+The response in this analysis is binary; either the home team won the game and is assigned a value of "1" or the home team lost the game, in which case it is assigned a "0". Since our response variable follows a binomial distribution, we can perform logistic regression using the logit link function. In the context of our study, the logit is the log odds of the home team winning. The logit link is used as it is the canonical link function, which has properties that we like to take advantage of when fitting these models. Using this generalized linear model allows us to model the probability that the home team wins as function of our suite of predictor variables. Equation~\ref{eq:logit} is the general form of the model that we will be fitting.\\
+
+\begin{equation} \label{eq:logit}
+logit(\pi_{i})=log\Big(\frac{\pi_{i}}{1-\pi_{i}}\Big)=\sum_{j=1}^{p} \beta_{j}x_{ij}
+\end{equation}
+
+In this equation, $\pi_{i}$ is the probability that the home team wins, the $\beta_{j}$'s are the parameters that we are interested in estimating, and $x_{ij}$ is our observed data. Using the statistical software R, we can fit a logistic regression equation using the function \texttt{glm} in the \textt{stats} package. With this function, we can specify the predictor variables to be used, as well as the family the response follows and the link function to be used. As our data are ungrouped, conventional goodness-of-fit tests will not be accurate. Instead, we will use the Hosmer-Lemeshow goodness-of-fit test for binary data to assess our model fit. To perform this test, we fit our model to generate fitted probabilities. Then, we order these probabilities and group them by quantiles. Ten groups is a common choice and so we will be grouping our fitted probabilities into ten groups. From there, the observed and expected number of success are found in each group and compared. Generally speaking, if these values are close, we do not have evidence that our specified model does not fit well, but if there are large differences, there is evidence that our model is not a good fit for the data.\\
 
 \subsection{Link Functions}
 
