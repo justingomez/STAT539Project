@@ -112,6 +112,8 @@ summary(model5)
 #yup...
 mean(resid(model5, type = "pearson")^2)
 
+model6<-glm(winloss~.,data=train[,c(8,10:21)],family=binomial)
+
 
 
 #Don't try to fit the full interaction model
@@ -153,11 +155,23 @@ MSE <- function(pred, obs) {mean((pred - obs)^2)}
 test <- read.csv("test.csv", header = TRUE)
 test<- test[-c(3239,5069),-c(1,2)]
 
-p<-predict(model1,newdata=test,type="response")
-tab<-table(p,test$winloss)
+missclass<-function(mod){
+  p<-predict(mod,newdata=test,type="response")
+  for(i in 1:length(p)){
+    ifelse(p[i]>.5,p[i]<-1,p[i]<-0)
+  }
+  tab<-table(p,test$winloss)
+  miss<-1-sum(diag(tab)/sum(tab))
+}
+
+miss1<-missclass(model1)
+miss2<-missclass(model2)
+miss3<-missclass(model3)
+miss4<-missclass(model4)
+miss5<-missclass(model5)
+miss6<-missclass(model6)
 
 
-plot(predict(model2))
 
 
 
