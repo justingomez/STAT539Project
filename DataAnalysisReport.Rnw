@@ -44,30 +44,40 @@ The data were obtained from a repository managed by Kaggle, Inc. related to the 
 
 Our data consist of performance statistics for both teams summarized as either percentages or differentials. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams. These are seperate variables for each team. All percentages were calculated as the number of made shots divided by the number of attempted shots. The differentials refer to the total count for the home team subtracted by the total count for the other team. We will be considering total rebounds (offensive rebounds plus defensive rebounds), assists, turnovers, steals, blocks, and personal fouls.  For instance, a positive rebound differential means that the winning team had more total rebounds than the losing team; a negative value would imply the opposite.  
 
-The table below lists the variables, each type, and the the manner in which they are calculated. 
+Table 1 below lists the variables, each type, and the the manner in which they are calculated. 
 
 \begin{table}[h]
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
-Variable Name & Type & Nickname & How Calculated
-Season& Year& Season& Year Played
-Lscore&&&
-Overtime&&&
-Winning Field Goal Pct&&&
-Losing Field Goal Pct&&&
-Winning 3 Point Pct&&&
-Losing 3 Point Pct&&&
-Winning Free Throw Pct&&&
-Losing Free Throw Pct&&&
-Turnover Differential&&&
-Assist Differential&&&
-Steal Differential&&&
-Block Differential&&&
-Personal Foul Differential& & &
-&&&
-&&&
-
+Variable Name & Type & Nickname & How Calculated\\
+\hline
+Overtime& Binary & OT & 1 if game went to overtime, 0 else\\
+\hline
+Winning Field Goal Pct& PCT&WFGP & Shots Made/Shots Attempted\\
+\hline
+Losing Field Goal Pct& PCT&LFGP & Shots Made/Shots Attempted \\
+\hline
+Winning 3 Point Pct& PCT&W3P & 3 Pointers Made/3 Pointers Att\\
+\hline
+Losing 3 Point Pct& PCT&L3P & 3 Pointers Made/3 Pointers Att\\
+\hline
+Winning Free Throw Pct&PCT&WFTP & Free Throws Made/Free Throws Att\\
+\hline
+Losing Free Throw Pct& PCT&LFTP & Free Throws Made/Free Throws Att\\
+\hline
+Turnover Differential& DIFF&TDIFF & Winning Team TOs - Losing Team TOs\\
+\hline
+Assist Differential& DIFF&ASTDIFF & Winning Team Assits - Losing Team Assists\\
+\hline
+Steal Differential& DIFF &SDIFF & Winning Team Steals - Losing Team Steals\\
+\hline
+Block Differential& DIFF&BLKDIFF & Winning Team Block - Losing Team Block\\
+\hline
+Personal Foul Differential& DIFF&PFDIFF & Winning Team PF - Losing Team PF\\
+\hline
+Total Rebound Differential &DIFF&TRDIFF& Winning Team Rebounds - Losing Team Rebounds\\
+\hline
 
 \end{tabular}
 \caption{}
