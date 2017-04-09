@@ -43,10 +43,10 @@ This analysis is focused more on identifying metrics that are associated with th
 Which factors are most important in helping a home team win a game?
 
 \item %2
-Are winning teams more likely to win the turnover battle? 
+Are teams that win turnover battle more likely to win the game? 
 
 \item %3
-Do any of the variables measured modify the effect of other covariates of interest?
+Do the effects of each covariate on the probability of winning change in games that go to overtime?
 
 \end{enumerate}
 
