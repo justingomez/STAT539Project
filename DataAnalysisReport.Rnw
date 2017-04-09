@@ -75,7 +75,7 @@ Personal Foul Differential& & &
 
 
 \subsection{Generalized Linear Models}
-The response in this analysis is binary; either the home team won the game and is assigned a value of "1" or the home team lost the game, in which case it is assigned a "0".
+The response in this analysis is binary; either the home team won the game and is assigned a value of "1" or the home team lost the game, in which case it is assigned a "0". 
 
 \subsection{Link Functions}
 

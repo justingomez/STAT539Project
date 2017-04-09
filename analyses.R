@@ -94,6 +94,25 @@ mean(resid(model2, type = "pearson")^2)
 
 #neither model appears to have a problem with overdispersion
 
+#interactive model with only sdiff:ot
+model3<-glm(winloss~.+sdiff:ot,data=train[,-c(1:7)],family=binomial)
+summary(model3)
+#ot:sdiff is not significant now....
+mean(resid(model3, type = "pearson")^2)
+
+#model with only percentages
+model4<-glm(winloss~.,data=train[,c(8,10:15)],family=binomial)
+summary(model4)
+#all the stars....
+mean(resid(model4, type = "pearson")^2)
+
+#model with only diffs
+model5<-glm(winloss~.,data=train[,c(8,16:21)],family=binomial)
+summary(model5)
+#yup...
+mean(resid(model5, type = "pearson")^2)
+
+
 
 #Don't try to fit the full interaction model
 
@@ -133,8 +152,9 @@ MSE <- function(pred, obs) {mean((pred - obs)^2)}
 
 test <- read.csv("test.csv", header = TRUE)
 test<- test[-c(3239,5069),-c(1,2)]
-which(is.na(test$lftp) == TRUE)
 
+p<-predict(model1,newdata=test,type="response")
+tab<-table(p,test$winloss)
 
 
 plot(predict(model2))
