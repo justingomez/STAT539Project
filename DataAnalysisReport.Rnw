@@ -35,7 +35,7 @@ NCAA College Basketball is a major cornerstone of college sports. While the game
 \subsection{Predictive Analytics in NCAA Basketball}
 Fans watching the NCAA Tournament are increasingly interested in making bets by filling out brackets, predicting each winner in the 7 rounds of the tournament; this has led to a proliferation of predictive modeling in College Basketball, both academic and casual. Some methods like those used by Harville and Smith (1992) make use of linear models to predict outcomes of games; however, more recent focus has been on so-called 'black box' predictive analytics.  While these are useful for simply predicting winners, these do not have much utility for inference; that is, they do not inform much about the factors that are most strongly associated with the probability of winning a game.  
 
-This analysis is focused more on identifying metrics that are associated with the probabiliity of a team winning a game; therefore, we use generalized linear models to analzye the data. This analysis focuses mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given game. The main questions of interest as are follows: 
+This analysis is focused more on identifying metrics that are associated with the probabiliity of a team winning a game; therefore, we use generalized linear models to analzye the data. The main questions of interest are as follows: 
 
 \begin{enumerate}
 \itemsep0em
@@ -43,16 +43,15 @@ This analysis is focused more on identifying metrics that are associated with th
 Which factors are most important in helping a home team win a game?
 
 \item %2
-Are winning teams more likely to win the turnover battle? 
+Are teams that win turnover battle more likely to win the game? 
 
 \item %3
-Do any of the variables measured modify the effect of other covariates of interest?
+Do the effects of each covariate on the probability of winning change in games that go to overtime?
 
 \end{enumerate}
 
 
-
-Although the main goal of this analysis is to do statsitical inference, we do intend to test the predictive ability of our final model by generating predictions of wins and losses and comparing our predictions to a testing data set. 
+We focus mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given game. Although the main goal of this analysis is to do statsitical inference, we intend to test the predictive ability of our final model by generating predictions of wins and losses and comparing our predictions to a testing data set. 
 
 
 
@@ -63,7 +62,7 @@ The data were obtained from a repository managed by Kaggle, Inc. related to the 
 
 Our data consist of performance statistics for both teams summarized as either percentages or differentials. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams. These are seperate variables for each team. All percentages were calculated as the number of made shots divided by the number of attempted shots. The differentials refer to the total count for the home team subtracted by the total count for the other team. We will be considering total rebounds (offensive rebounds plus defensive rebounds), assists, turnovers, steals, blocks, and personal fouls.  For instance, a positive rebound differential means that the winning team had more total rebounds than the losing team; a negative value would imply the opposite.  
 
-Table 1 below lists the variables, each type, and the the manner in which they are calculated. 
+Table ~\ref{tab:Data} below lists the variables, each type, and the the manner in which they are calculated. 
 
 \begin{table}[h]
 \centering
@@ -99,7 +98,7 @@ Total Rebound Differential &DIFF&TRDIFF& Winning Team Rebounds - Losing Team Reb
 \hline
 
 \end{tabular}
-\caption{}
+\caption{\label{tab:Data}}
 \end{table}
 
 
@@ -115,11 +114,69 @@ In this equation, $\pi_{i}$ is the probability that the home team wins, the $\be
 \subsection{Link Functions}
 
 \section{Results}
+\subsection{Descriptive Statistics}
 
+\subsubsection{Percentages}
+The percentage variables give some interesting results about the number of teams that won games.  In general, we would expect that teams that win games would tend to make a higher percentage of their shots attempted; indeed, this does appear to be the case. For winning teams, the minimum, maximum, median and mean values for all the percentage variables are higher than for the losing teams.  This makes sense: Teams that miss more shots will not only fail to score points offensively, they will also give the other team more opportunities to score on their end. 
+
+<<dontinclude, include = FALSE>>=
+a <- summary(train$wfgp)[c(1,3,4,6)]
+b <- summary(train$lfgp)[c(1,3,4,6)]
+
+c <- summary(train$w3p)[c(1,3,4,6)]
+d <- summary(train$l3p)[c(1,3,4,6)]
+
+e <- summary(train$wftp)[c(1,3,4,6)]
+f <- summary(train$lftp)[c(1,3,4,6)]
+
+dframe <- data.frame(cbind(a,b,c,d,e,f))
+library(knitr)
+colnames(dframe) <- c("Win FG","Lose FG", "Win 3pt", "Lose 3pt", "Win FT", "Lose FT")
+@
+
+<<actualtable, include = TRUE, echo = FALSE>>=
+kable(dframe)
+@
+
+
+\subsubsection{Differentials}
+
+Similarly, we can perform exploratory analysis on the differentials variables. Recall that each differentials refer to the difference between the number of the given statistic for the winning team subtracted by the value for the losing team. Teams that win the turnover battle, then, have a positive turnover differential; however, this does not guarantee victory in the game.  
+
+The indicates much of what would be expected; however, the minimum values for this metric indicate some fascinating values. At some point, a team that was out-rebounded by 31 rebounds managed to win the game; moreover, teams won the game despite being out-assited by 17 or out-blocked by 15.  
+
+It is less surprising that for all the differential variables that we expected to be positively associated with winning, the mean and median differentials were positive.  For Turnover Differential and  Personal Foul Differential, both statistics that would be expected to impede a team, the mean values were negative. That being said, one team did manage to lose the turnover battle by 20 and still win, an impressive feat. 
+<<dontinclude, include = FALSE>>=
+a <- summary(train$trdiff)[c(1,3,4,6)]
+b <- summary(train$astdiff)[c(1,3,4,6)]
+
+c <- summary(train$tdiff)[c(1,3,4,6)]
+d <- summary(train$sdiff)[c(1,3,4,6)]
+
+e <- summary(train$blkdiff)[c(1,3,4,6)]
+f <- summary(train$pfdiff)[c(1,3,4,6)]
+
+dframe2 <- data.frame(cbind(a,b,c,d,e,f))
+library(knitr)
+colnames(dframe2) <- c("TR Diff", "Assist Diff", "Turnover Diff","Steals Diff", "Blocks Diff","Personal Foul Diff")
+@
+
+<<iwishiwasgolfing, include = TRUE, echo = FALSE>>=
+kable(dframe2)
+@
+Taken together, these statistics imply that there is no sure-fire way to win a basketball game. A team can out-rebound its opponent, it can win the turnover battle, or dominate its opponent on any single statistic; however, without a well-rounded performance on all metrics, it can be very possible to lose. 
+
+We can also examine a series of plots that examine the differentials specifically and how they relate to whether the home team won or not in Figure~\ref{fig:diff}. These show the proportion of wins by whether the team had positive or negative differentials. Teams that had more assists, steals and blocks than their opponent were more likely to win.  Not surprisingly, teams with negative turnover differentials (i.e. turned the ball over fewer times than their opponent) and teams that fouled less were also more likely to win.
+
+
+\subsection{Logistic Regression}
+The plots in the prior section tell a pretty clear story; however, plots do not always give the entire picture. More rigorous analysis can be done using statistical testing via generalized linear models. The final logistic regression model included the additive effects of the following variables, along with the interaction between overtime and each of the differential variables. The results are shown in Table ~\ref{tab:Regression}. 
+
+\subsection{Prediction}
+The goals for this analysis are specifically inferential in nature; however, it is worthwhile to examine the predictive efficacy of the model for picking winners and losers of any given game. We partitioned the original data into a training set on which we fit statsitical models and a testing set on which we tested our predictions from the final model. The testing set had 14276 games. The final model correctly classified 72.4 percent of the games as wins. 
 
 \section{Discussion}
-\subsection{Logistic Regression}
-The results on 
+
 
 \subsection{}
 
