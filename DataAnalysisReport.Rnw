@@ -9,7 +9,7 @@
 \usepackage{titlesec}
 \usepackage{caption}
 \pagestyle{fancy}
-\lhead{Justin Gomez, Paul Harmon}
+\lhead{Names Omitted}
 \chead{Data Analysis Report}
 \rhead{March 30, 2017}
 \setlength{\headheight}{20pt}
@@ -26,8 +26,14 @@
 College Basketball, including the NCAA Tournament, is growing in popularity and scope across the country. Winnng programs benefit from increased exposure, funding opportunities, and prestige. It is often of interest to try to predict which statistics are most strongly associated with winning a game. In order to analyze this, we fit binary regression models to analyze data from 49844 college basketball games since the 2003 season in order to determine which variables were most strongly associated with the probability of the home team winning. 
 
 Results indicated that... 
-\end{abstract
+\end{abstract}
 
+<<intro, include = FALSE, echo = FALSE>>=
+train<-read.csv("train.csv",header=TRUE)[,-c(1:2)]
+train<-train[-c(which(is.na(train$lftp))),]
+train<-train[-c(which(is.na(train$wftp))),]
+@
+\doublespacing
 \section{Introduction}
 \subsection{College Basketball: A Growing Sport}
 NCAA College Basketball is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. It is therefore of interest to not only coaches and fans but also campus administrators to determine which factors are most associated with winning basketball games. \\
@@ -111,9 +117,9 @@ The response in this analysis is binary; either the home team won the game and i
 \subsection{Descriptive Statistics}
 
 \subsubsection{Percentages}
-The percentage variables give some interesting results about the number of teams that won games.  In general, we would expect that teams that win games would tend to make a higher percentage of their shots attempted; indeed, this does appear to be the case. For winning teams, the minimum, maximum, median and mean values for all the percentage variables are higher than for the losing teams.  This makes sense: Teams that miss more shots will not only fail to score points offensively, they will also give the other team more opportunities to score on their end. 
+The percentage variables give some interesting results about the number of teams that won games.  In general, we would expect that teams that win games would tend to make a higher percentage of their shots attempted; indeed, this does appear to be the case. For winning teams, the minimum, maximum, median and mean values for all the percentage variables are higher than for the losing teams.  This makes sense: Teams that miss more shots will not only fail to score points offensively, they will also give the other team more opportunities to score on their end. \\
 
-<<dontinclude, include = FALSE>>=
+<<dontinclude1, include = FALSE>>=
 a <- summary(train$wfgp)[c(1,3,4,6)]
 b <- summary(train$lfgp)[c(1,3,4,6)]
 
@@ -139,7 +145,7 @@ Similarly, we can perform exploratory analysis on the differentials variables. R
 
 The indicates much of what would be expected; however, the minimum values for this metric indicate some fascinating values. At some point, a team that was out-rebounded by 31 rebounds managed to win the game; moreover, teams won the game despite being out-assited by 17 or out-blocked by 15.  
 
-It is less surprising that for all the differential variables that we expected to be positively associated with winning, the mean and median differentials were positive.  For Turnover Differential and  Personal Foul Differential, both statistics that would be expected to impede a team, the mean values were negative. That being said, one team did manage to lose the turnover battle by 20 and still win, an impressive feat. 
+It is less surprising that for all the differential variables that we expected to be positively associated with winning, the mean and median differentials were positive.  For Turnover Differential and  Personal Foul Differential, both statistics that would be expected to impede a team, the mean values were negative. That being said, one team did manage to lose the turnover battle by 20 and still win, an impressive feat. \\
 <<dontinclude, include = FALSE>>=
 a <- summary(train$trdiff)[c(1,3,4,6)]
 b <- summary(train$astdiff)[c(1,3,4,6)]
@@ -160,7 +166,15 @@ kable(dframe2)
 @
 Taken together, these statistics imply that there is no sure-fire way to win a basketball game. A team can out-rebound its opponent, it can win the turnover battle, or dominate its opponent on any single statistic; however, without a well-rounded performance on all metrics, it can be very possible to lose. 
 
-We can also examine a series of plots that examine the differentials specifically and how they relate to whether the home team won or not in Figure~\ref{fig:diff}. These show the proportion of wins by whether the team had positive or negative differentials. Teams that had more assists, steals and blocks than their opponent were more likely to win.  Not surprisingly, teams with negative turnover differentials (i.e. turned the ball over fewer times than their opponent) and teams that fouled less were also more likely to win.
+We can also examine a series of plots that examine the differentials specifically and how they relate to whether the home team won or not in Figure~\ref{fig:diff}. These show the proportion of wins by whether the team had positive or negative differentials. Teams that had more assists, steals and blocks than their opponent were more likely to win.  Not surprisingly, teams with negative turnover differentials (i.e. turned the ball over fewer times than their opponent) and teams that fouled less were also more likely to win. A quick glance at these plots can give an illuminating look at the data; lines that are positively sloped indicate that winning teams were more likely to have positive differentials and negatively-sloped lines indicate that the winning team was more likely to have a negative differential. \\
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.7\textwidth]{differentials.jpeg}
+\captionsetup{font=footnotesize,labelfont=footnotesize}
+\caption{\label{fig:diff} \textbf{Plots of the five differential variables being considered as predictors. Proportions of wins are evaluated for winning teams with positive and negative differentials on each variable. Differentials found as winning minus losing.}}
+\end{figure}
+
 
 
 \subsection{Logistic Regression}
@@ -169,16 +183,23 @@ The plots in the prior section tell a pretty clear story; however, plots do not 
 \subsection{Prediction}
 The goals for this analysis are specifically inferential in nature; however, it is worthwhile to examine the predictive efficacy of the model for picking winners and losers of any given game. We partitioned the original data into a training set on which we fit statsitical models and a testing set on which we tested our predictions from the final model. The testing set had 14276 games. The final model correctly classified 72.4 percent of the games as wins. 
 
+
 \section{Discussion}
 
+The regression analysis indicates much of what we already know. Teams that score more points, turn the ball over less, and cut down on fouls tend to be more likely to win basketball games. There are, however, some more salient conclusions that can be drawn from this analysis; most of them pertain to the magnitude of the effect that each covariate has on the probability of winning. 
 
-\subsection{}
+Although we found that each variable had a "statistically significant" impact on the probability of winning, some predictors' practical effects were more substantial than others. It should be noted that the sample size is so large in this analysis that these procedures have the ability to detect very small differences in win probabilities; small p-values do not indicate the presence of large practical effects. That being said, given the magnitude of the estimated effects and small p-values associated with the following variables, we believe that they are the most important to the analysis. 
+
+In reference to the second research question, it seems clear that winning the turnover battle is associated with an increase in the probability of winning a basketball game. 
+
+As an answer to question three, we have some evidence that the effect of steals may differ in games that went to overtime vs. those that did not. 
 
 
+Finally, these results should not be interpreted as causal. Each one of these variables, in and of themeselves, has an effect on the probability of winning. This methodology does not, however, illuminate how simultaneous increases on multiple covariates might impact the probability of winning, nor does it guarantee that a team that maximizes important predictors of winning will win. 
 
 \section{Appendix}
 
-<<freakingdataanalysis, include = FALSE>>=
+<<dataanalysis, include = FALSE>>=
 #model
 
 @
