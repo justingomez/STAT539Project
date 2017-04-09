@@ -173,8 +173,8 @@ miss6<-missclass(model6)
 
 
 
-
-
+library(ResourceSelection)
+hl<-hoslem.test(model1$y,fitted(model1),g=10)
 
 
 
