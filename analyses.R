@@ -76,14 +76,14 @@ title("Block Differential")
 
 
 
-###lets fit some mutha@$%@#$%@ing models yo
+###lets fit some models
 
 
 #additive model
 model1 <- glm(winloss ~ factor(ot) + wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff, family = binomial(link = "logit"), data = train)
 summary(model1)
 
-mean(resid(model1, type = "pearson")^2) #damn this looks as good as I've ever seen in my statistical career
+mean(resid(model1, type = "pearson")^2) #this looks as good as I've ever seen in my statistical career
 
 
 #interactive model (interacted with the differentials)
@@ -92,16 +92,38 @@ summary(model2)
  
 mean(resid(model2, type = "pearson")^2)
 
-#neither model appears to have a problem with overdispersoin
+#neither model appears to have a problem with overdispersion
 
 
 #Don't try to fit the full interaction model
 
+#what if we tried a probit link?
+probit.1 <- glm(winloss ~ factor(ot) + wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff, family = binomial(link = "probit"), data = train)
+summary(probit.1)
+#results are quite similar
+
+
+probit.2 <- glm(winloss ~ wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "probit"), data = train)
+summary(probit.2)
+#
+
+
+#we could try a quasibinomial regression although I think it's unneccessary
+quasi.1 <- glm(winloss ~ factor(ot) + wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff, family = quasibinomial(link = "logit"), data = train)
+summary(quasi.1)
+
+
+quasi.2 <- glm(winloss ~ wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = quasibinomial(link = "logit"), data = train)
+summary(quasi.2)
+
+
 
 #lets try fitting a random effect, but I can't get this to work right. Screw it
 library(MASS); library(lme4)
-model1 <- lmer(fixed = winloss ~ factor(ot) + wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff, family = binomial(link = "logit"), random = ~1|Season, data = train)
+model1 <- glmer(winloss ~ factor(ot) + wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + (1|Season), family = binomial(link = "logit"), data = train)
 summary(model1)
+
+
 
 
 

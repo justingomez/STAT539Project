@@ -41,7 +41,16 @@ The data were obtained from a repository on Kaggle.com related to the March Mach
 
 Our data consist of performance statistics for both teams summarized as either percentages or differentials. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams. These are seperate variables for each team. All percentages were calculated as the number of made shots divided by the number of attempted shots. The differentials refer to the total count for the home team subtracted by the total count for the other team. We will be considering total rebounds (offensive rebounds plus defensive rebounds), assists, turnovers, steals, blocks, and personal fouls.  For instance, a positive rebound differential means that the winning team had more total rebounds than the losing team; a negative value would imply the opposite.  
 
+The table below lists the variables, each type, and the the manner in which they are calculated. 
+
+begin{tabular}
+
+end{tabular}
+
+
 \subsection{Generalized Linear Models}
+The response in this analysis is binary; either the home team won the game and is assigned a value of "1" or the home team lost the game, in which case it is assigned a "0".
+
 \subsection{Link Functions}
 
 \section{Results}
@@ -49,6 +58,12 @@ Our data consist of performance statistics for both teams summarized as either p
 \section{Discussion}
 
 \section{Appendix}
+
+<<freakingdataanalysis, include = FALSE>>=
+
+
+@
+
 
 \section{}
 
