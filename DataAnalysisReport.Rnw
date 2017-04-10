@@ -9,7 +9,7 @@
 \usepackage{titlesec}
 \usepackage{caption}
 \pagestyle{fancy}
-\lhead{Names Omitted}
+\lhead{Names Redacted}
 \chead{Data Analysis Report}
 \rhead{March 30, 2017}
 \setlength{\headheight}{20pt}
