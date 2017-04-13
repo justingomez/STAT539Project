@@ -178,9 +178,7 @@ We can also examine a series of plots that examine the differentials specificall
 
 
 \subsection{Logistic Regression}
-The plots in the prior section tell a pretty clear story; however, plots do not always give the entire picture. Since this analysis considers multiple variables, care should be taken in examining the effect of one variable with respect to the others.  More rigorous analysis can be done using statistical testing via generalized linear models. In order to fit a model, the 
-
-The final logistic regression model included the additive effects of the following variables, along with the interaction between overtime and each of the differential variables. The results are shown in Table ~\ref{tab:Regression}. 
+The plots in the prior section tell a pretty clear story; however, plots do not always give the entire picture. Since this analysis considers multiple variables, care should be taken in examining the effect of one variable with respect to the others.  More rigorous analysis can be done using statistical testing via generalized linear models. In order to fit a model to test our hypotheses, we fit a logistic regression model included the additive effects of all of the percentage variables, along with the interaction between overtime and each of the differential variables. A Hosmer-Lemeshow Chi-Squared test for goodness of fit yielded a test statistic of 12.554 on 8 degrees of freedom with an associated p-value of 0.1281, indicating a lack of evidence against the model. The results are shown in Table ~\ref{tab:Regression}. 
 
 % latex table generated in R 3.3.2 by xtable 1.8-2 package
 % Thu Apr 13 15:26:54 2017
