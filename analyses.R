@@ -93,7 +93,13 @@ summary(model2)
 library(xtable)
 tab<-summary(model2)$coefficients
 tab<-round(tab,3)
+tab2 <- exp(tab)
 xtable(tab)
+
+
+xtable(tab2)
+
+
  
 mean(resid(model2, type = "pearson")^2)
 

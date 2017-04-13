@@ -23,9 +23,9 @@
 
 
 \begin{abstract}
-College Basketball, including the NCAA Tournament, is growing in popularity and scope across the country. Winnng programs benefit from increased exposure, funding opportunities, and prestige. It is often of interest to try to predict which statistics are most strongly associated with winning a game. In order to analyze this, we fit binary regression models to analyze data from 49844 college basketball games since the 2003 season in order to determine which variables were most strongly associated with the probability of the home team winning. 
+College Basketball, including the NCAA Tournament, is growing in popularity and scope across the country. Winnng programs benefit from increased exposure, funding opportunities, and prestige. It is often of interest to try to predict which statistics are most strongly associated with winning a game. In order to analyze this, we fit binary logistic regression models to analyze data from 49844 college basketball games since the 2003 season in order to determine which variables were most strongly associated with the probability of the home team winning. 
 
-Results indicated that... 
+Results indicated strong evidence that Field Goal Percentage, Three Point Percentage, and Free Throw percentage for both winning and losing teams were associated with the probability of winning. Further, this analysis provides evidence the effect of steals on winning percentage may differ for games that go to overtime vs. those that do not.  
 \end{abstract}
 
 <<intro, include = FALSE, echo = FALSE>>=
@@ -118,8 +118,10 @@ logit(\pi_{i})=log\Big(\frac{\pi_{i}}{1-\pi_{i}}\Big)=\sum_{j=1}^{p} \beta_{j}x_
 In this equation, $\pi_{i}$ is the probability that the home team wins, the $\beta_{j}$'s are the parameters that we are interested in estimating, and $x_{ij}$ is our observed data. Using the statistical software R, we can fit a logistic regression equation using the function \texttt{glm} in the \textt{stats} package. With this function, we can specify the predictor variables to be used, as well as the family the response follows and the link function to be used. As our data are ungrouped, conventional goodness-of-fit tests will not be accurate. Instead, we will use the Hosmer-Lemeshow goodness-of-fit test for binary data to assess our model fit. To perform this test, we fit our model to generate fitted probabilities. Then, we order these probabilities and group them by quantiles. Ten groups is a common choice and so we will be grouping our fitted probabilities into ten groups. From there, the observed and expected number of success are found in each group and compared. Generally speaking, if these values are close, we do not have evidence that our specified model does not fit well, but if there are large differences, there is evidence that our model is not a good fit for the data.\\
 
 \subsection{Link Functions}
+In generalized linear models, the link function relates the linear predictor (in this case, the data) to the response. The choice of link function plays an important role in the interpretation of the model. Two choices are common: the logit link and the probit link.  We choose the logit link, which allows for direct calculation of the probability of the home team winning a game. The probit link does not make a great deal of sense in this model because we have little reason to develop an underlying latent scale of player performance; it is more useful to coaches and players to understand the relationship between on-court performance as measured and the effect it has on the probability of winning.  \\
 
-\section{Results}
+
+
 \subsection{Descriptive Statistics}
 
 \subsubsection{Percentages}
@@ -184,7 +186,7 @@ We can also examine a series of plots that examine the differentials specificall
 
 
 \subsection{Logistic Regression}
-The plots in the prior section tell a pretty clear story; however, plots do not always give the entire picture. More rigorous analysis can be done using statistical testing via generalized linear models. The final logistic regression model included the additive effects of the following variables, along with the interaction between overtime and each of the differential variables. The results are shown in Table ~\ref{tab:Regression}. 
+The plots in the prior section tell a pretty clear story; however, plots do not always give the entire picture. Since this analysis considers multiple variables, care should be taken in examining the effect of one variable with respect to the others.  More rigorous analysis can be done using statistical testing via generalized linear models. The final logistic regression model included the additive effects of the following variables, along with the interaction between overtime and each of the differential variables. The results are shown in Table ~\ref{tab:Regression}. 
 
 \begin{table}[h]
 \centering
@@ -214,6 +216,39 @@ The plots in the prior section tell a pretty clear story; however, plots do not 
    \hline
 \end{tabular}
 \caption{\label{tab:Regression} Table of regression coefficients and their standard errors with associated standardized statistics and p-values.}
+\end{table}
+
+\subsection{Effects on Winning}
+
+% latex table generated in R 3.3.2 by xtable 1.8-2 package
+% Thu Apr 13 14:02:08 2017
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & z value & Pr($>$$|$z$|$) \\ 
+  \hline
+(Intercept) & 0.87 & 1.13 & 0.31 & 1.27 \\ 
+  wfgp & 0.22 & 1.23 & 0.00 & 1.00 \\ 
+  lfgp & 4.31 & 1.23 & 1052.58 & 1.00 \\ 
+  w3p & 0.77 & 1.11 & 0.08 & 1.01 \\ 
+  l3p & 1.56 & 1.12 & 51.88 & 1.00 \\ 
+  wftp & 1.42 & 1.10 & 39.41 & 1.00 \\ 
+  lftp & 0.60 & 1.09 & 0.00 & 1.00 \\ 
+  trdiff & 1.03 & 1.00 & 1128324922.04 & 1.00 \\ 
+  astdiff & 1.15 & 1.00 & 2395790040224777109644.00 & 1.00 \\ 
+  tdiff & 0.90 & 1.00 & 0.00 & 1.00 \\ 
+  sdiff & 0.98 & 1.00 & 0.00 & 1.00 \\ 
+  blkdiff & 1.15 & 1.00 & 9301945809379318.00 & 1.00 \\ 
+  pfdiff & 0.87 & 1.00 & 0.00 & 1.00 \\ 
+  ot & 0.99 & 1.05 & 0.86 & 2.41 \\ 
+  trdiff:ot & 0.99 & 1.01 & 0.33 & 1.31 \\ 
+  sdiff:ot & 0.97 & 1.01 & 0.11 & 1.03 \\ 
+  blkdiff:ot & 0.98 & 1.01 & 0.23 & 1.15 \\ 
+  pfdiff:ot & 1.00 & 1.01 & 1.25 & 2.28 \\ 
+  astdiff:ot & 0.98 & 1.01 & 0.22 & 1.14 \\ 
+   \hline
+\end{tabular}
 \end{table}
 
 \subsection{Prediction}
