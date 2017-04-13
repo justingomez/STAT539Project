@@ -80,24 +80,24 @@ title("Block Differential")
 
 
 #additive model
-model1 <- glm(winloss ~ factor(ot) + wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff, family = binomial(link = "logit"), data = train)
+model1 <- glm(winloss ~ factor(ot) + (wfgp-lfgp) + (w3p - l3p) + (wftp - lftp) + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff, family = binomial(link = "logit"), data = train)
 summary(model1)
 
 mean(resid(model1, type = "pearson")^2) #this looks as good as I've ever seen in my statistical career
 
 
 #interactive model (interacted with the differentials)
-model2 <- glm(winloss ~ wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
+model2 <- glm(winloss ~ (wfgp-lfgp) + (w3p - l3p) + (wftp - lftp) + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
 summary(model2)
 
 library(xtable); library(boot)
 tab<-summary(model2)$coefficients
 tab<-round(tab,3)
-tab2 <- inv.logit(tab)
+tab2 <- exp(tab)
 xtable(tab)
 
 confidence <- confint(model2)
-xtable(cbind((tab2)[,1],inv.logit(confidence))) 
+xtable(cbind((tab2)[,1],exp(confidence))) 
 
 ##
 model.potential <- glm(winloss ~ wfgp + w3p + wftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
