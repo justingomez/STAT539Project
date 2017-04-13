@@ -9,7 +9,7 @@
 \usepackage{titlesec}
 \usepackage{caption}
 \pagestyle{fancy}
-\lhead{Names Redacted}
+\lhead{GUESS WHO!}
 \chead{Data Analysis Report}
 \rhead{April 13, 2017}
 \setlength{\headheight}{20pt}
@@ -23,9 +23,9 @@
 
 
 \begin{abstract}
-College Basketball, including the NCAA Tournament, is growing in popularity and scope across the country. Winnng programs benefit from increased exposure, funding opportunities, and prestige. It is often of interest to try to predict which statistics are most strongly associated with winning a game. In order to analyze this, we fit binary logistic regression models to analyze data from 49844 college basketball games since the 2003 season in order to determine which variables were most strongly associated with the probability of the home team winning. 
-
-Results indicated strong evidence that Field Goal Percentage, Three Point Percentage, and Free Throw percentage for both winning and losing teams were associated with the probability of winning. Further, this analysis provides evidence the effect of steals on winning percentage may differ for games that go to overtime vs. those that do not.  
+College basketball, including the NCAA Tournament, is growing in popularity and scope across the country. Winning programs benefit from increased exposure, funding opportunities, and prestige. With a great deal riding on the success of the team's season, it would be interesting to know what aspects of the game contribute to the probability of winning. In order to analyze this, we fit binary logistic regression models to analyze data from thousands of college basketball games since the 2003 season in order to determine which variables were most strongly associated with the probability of the home team winning. \\
+%re-write
+Results indicated strong evidence that field Goal Percentage, Three Point Percentage, and Free Throw percentage for both winning and losing teams were associated with the probability of winning. Further, this analysis provides evidence the effect of steals on winning percentage may differ for games that go to overtime vs. those that do not.  \\
 \end{abstract}
 
 <<intro, include = FALSE, echo = FALSE>>=
@@ -39,77 +39,70 @@ train<-train[-c(which(is.na(train$wftp))),]
 NCAA College Basketball is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. It is therefore of interest to not only coaches and fans but also campus administrators to determine which factors are most associated with winning basketball games. \\
 
 \subsection{Predictive Analytics in NCAA Basketball}
-Fans watching the NCAA Tournament are increasingly interested in making bets by filling out brackets, predicting each winner in the 7 rounds of the tournament; this has led to a proliferation of predictive modeling in College Basketball, both academic and casual. Some methods like those used by Harville and Smith (1992) make use of linear models to predict outcomes of games; however, more recent focus has been on so-called 'black box' predictive analytics.  While these are useful for simply predicting winners, these do not have much utility for inference; that is, they do not inform much about the factors that are most strongly associated with the probability of winning a game.  
+Fans watching the NCAA Tournament are increasingly interested in making bets by filling out brackets, predicting each winner in the seven rounds of the tournament; this has led to a proliferation of predictive modeling in college basketball, both academic and casual. Some methods like those used by Harville and Smith (1992) make use of linear models to predict outcomes of games; however, more recent focus has been on so-called 'black box' predictive analytics.  While these are useful for simply predicting winners, these do not have much utility for inference; that is, they do not inform much about the factors that are most strongly associated with the probability of winning a game.  \\
 
-This analysis is focused more on identifying metrics that are associated with the probabiliity of a team winning a game; therefore, we use generalized linear models to analzye the data. The main questions of interest are as follows: 
+This analysis is focused more on identifying metrics that are associated with the probabiliity of a team winning a game; therefore, we use generalized linear models to analzye the data. The main questions of interest are as follows: \\
 
 \begin{enumerate}
 \itemsep0em
 \item %1
-Which factors are most important in helping a home team win a game?
+Which factors are most important in helping a home team win a game?\\
 
 \item %2
-Are teams that win turnover battle more likely to win the game? 
+Are teams that win turnover battle more likely to win the game? \\
 
 \item %3
-Do the effects of each covariate on the probability of winning change in games that go to overtime?
+Do the effects of each covariate on the probability of winning change in games that go to overtime?\\
 
 \end{enumerate}
 
 
-We focus mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given game. Although the main goal of this analysis is to do statsitical inference, we intend to test the predictive ability of our final model by generating predictions of wins and losses and comparing our predictions to a testing data set. 
+We focus mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given game. Although the main goal of this analysis is to do statsitical inference, we intend to test the predictive ability of our final model. To do this, we split our full data set into two sets: a training set comprised of 70\% of the data, obatined through stratified random sampling by season; and a testing set comprised of the remaining 30\% of the data. We will fit our generalized linear models on the training set, and thes predict whether home teams won or lost using our testing data. Since we know the actualy outcome of each game, we can find classification rates for our predictions to judge the performance of the model.\\ 
 
 
 
 \section{Data and Methods}
 
 \subsection{The Data}
-The data were obtained from a repository managed by Kaggle, Inc. related to the March Machine Learning Mania competition in 2016. We settled on a reduced set of fourteen predictor variables to include in our study of our single binary response: whether the home team won or not. Our dataset contains more than sixty-four thousand games spanning fourteen seasons of basketball. Since so much changes from year to year, including the season as a predictor may add useful information. Whether or not a game goes into overtime is also a variable of interest as it may provide some insight into the level of competition between the teams.To get an idea for how many points winning teams might need to put up in a typical game, we will also include the winning team's score. 
+The data were obtained from a repository managed by Kaggle, Inc. related to the March Machine Learning Mania competition in 2016. We settled on a reduced set of eleven predictor variables to include in our study of our single binary response: whether the home team won or not. Our dataset contains more than sixty-four thousand games spanning fourteen seasons of basketball. 
+For each game, we can have a slew of performance statistics for both teams summarized as differences (differentials) in percentages or raw counts. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams, and will include this information in the model by subtracting the losing team percentages from the winning team percentages. All percentages were calculated as the number of made shots divided by the number of attempted shots. For raw counts, we will be considering total rebounds (offensive rebounds plus defensive rebounds), assists, turnovers, steals, blocks, and personal fouls for both the winning and losing teams. Again, differentials are found for each count as the winning team's numbers minus the losing team's numbers. For instance, a positive rebound differential means that the winning team had more total rebounds than the losing team; a negative value would imply the opposite. Whether or not a game goes into overtime is of interest as well as it may provide some insight into the level of competition between the teams.\\
 
-Our data consist of performance statistics for both teams summarized as either percentages or differentials. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams. These are seperate variables for each team. All percentages were calculated as the number of made shots divided by the number of attempted shots. The differentials refer to the total count for the home team subtracted by the total count for the other team. We will be considering total rebounds (offensive rebounds plus defensive rebounds), assists, turnovers, steals, blocks, and personal fouls.  For instance, a positive rebound differential means that the winning team had more total rebounds than the losing team; a negative value would imply the opposite.  
-
-Table ~\ref{tab:Data} below lists the variables, each type, and the the manner in which they are calculated. 
+Table ~\ref{tab:Data} below lists the variables, each type, and the the manner in which they are calculated. \\
 
 \begin{table}[h]
 \centering
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|}
 \hline
-Variable Name & Type & Nickname & How Calculated\\
+Variable Name & Nickname\\
 \hline
-Overtime& Binary & OT & 1 if game went to overtime, 0 else\\
+Overtime & OT\\
 \hline
-Winning Field Goal Pct& PCT&WFGP & Shots Made/Shots Attempted\\
+Field Goal Percentage  & FGP\\
 \hline
-Losing Field Goal Pct& PCT&LFGP & Shots Made/Shots Attempted \\
+Three Point Percentage & 3P\\
 \hline
-Winning 3 Point Pct& PCT&W3P & 3 Pointers Made/3 Pointers Att\\
+Free Throw Percentage & FTP\\
 \hline
-Losing 3 Point Pct& PCT&L3P & 3 Pointers Made/3 Pointers Att\\
+Turnover Differential & TDIFF\\
 \hline
-Winning Free Throw Pct&PCT&WFTP & Free Throws Made/Free Throws Att\\
+Assist Differential & ASTDIFF\\
 \hline
-Losing Free Throw Pct& PCT&LFTP & Free Throws Made/Free Throws Att\\
+Steal Differential & SDIFF\\
 \hline
-Turnover Differential& DIFF&TDIFF & Winning Team TOs - Losing Team TOs\\
+Block Differential & BLKDIFF\\
 \hline
-Assist Differential& DIFF&ASTDIFF & Winning Team Assits - Losing Team Assists\\
+Personal Foul Differential & PFDIFF\\
 \hline
-Steal Differential& DIFF &SDIFF & Winning Team Steals - Losing Team Steals\\
-\hline
-Block Differential& DIFF&BLKDIFF & Winning Team Block - Losing Team Block\\
-\hline
-Personal Foul Differential& DIFF&PFDIFF & Winning Team PF - Losing Team PF\\
-\hline
-Total Rebound Differential &DIFF&TRDIFF& Winning Team Rebounds - Losing Team Rebounds\\
+Total Rebound Differential & TRDIFF\\
 \hline
 
 \end{tabular}
-\caption{\label{tab:Data}}
+\caption{\label{tab:Data} Table summarizing the suite of covariates used to fit models. For the type of variable, PCT stands for percentage}
 \end{table}
 
 
 \subsection{Generalized Linear Models}
-The response in this analysis is binary; either the home team won the game and is assigned a value of "1" or the home team lost the game, in which case it is assigned a "0". Since our response variable follows a binomial distribution, we can perform logistic regression using the logit link function. In the context of our study, the logit is the log odds of the home team winning. The logit link is used as it is the canonical link function, which has properties that we like to take advantage of when fitting these models. Using this generalized linear model allows us to model the probability that the home team wins as function of our suite of predictor variables. Equation~\ref{eq:logit} is the general form of the model that we will be fitting.\\
+The response in this analysis is binary; either the home team won the game and is assigned a value of ``1" or the home team lost the game, in which case it is assigned a ``0". Since our response variable follows a binomial distribution, we can perform logistic regression using the logit link function. In the context of our study, the logit is the log odds of the home team winning. The logit link is used as it is the canonical link function, which has properties that we like to take advantage of when fitting these models. Using this generalized linear model allows us to model the probability that the home team wins as function of our suite of predictor variables. Equation~\ref{eq:logit} is the general form of the model that we will be fitting.\\
 
 \begin{equation} \label{eq:logit}
 logit(\pi_{i})=log\Big(\frac{\pi_{i}}{1-\pi_{i}}\Big)=\sum_{j=1}^{p} \beta_{j}x_{ij}
