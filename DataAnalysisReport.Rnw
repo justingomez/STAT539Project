@@ -11,7 +11,7 @@
 \pagestyle{fancy}
 \lhead{Names Redacted}
 \chead{Data Analysis Report}
-\rhead{March 30, 2017}
+\rhead{April 13, 2017}
 \setlength{\headheight}{20pt}
 \renewcommand{\headrulewidth}{0.2pt}
 \renewcommand{\footrulewidth}{0.2pt}
