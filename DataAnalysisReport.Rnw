@@ -170,6 +170,7 @@ colnames(dframe2) <- c("TR Diff", "Assist Diff", "Turnover Diff","Steals Diff", 
 <<iwishiwasgolfing, include = TRUE, echo = FALSE>>=
 kable(dframe2)
 @
+\vspace{20pt}
 Taken together, these statistics imply that there is no sure-fire way to win a basketball game. A team can out-rebound its opponent, it can win the turnover battle, or dominate its opponent on any single statistic; however, without a well-rounded performance on all metrics, it can be very possible to lose. 
 
 We can also examine a series of plots that examine the differentials specifically and how they relate to whether the home team won or not in Figure~\ref{fig:diff}. These show the proportion of wins by whether the team had positive or negative differentials. Teams that had more assists, steals and blocks than their opponent were more likely to win.  Not surprisingly, teams with negative turnover differentials (i.e. turned the ball over fewer times than their opponent) and teams that fouled less were also more likely to win. A quick glance at these plots can give an illuminating look at the data; lines that are positively sloped indicate that winning teams were more likely to have positive differentials and negatively-sloped lines indicate that the winning team was more likely to have a negative differential. \\
@@ -182,26 +183,55 @@ We can also examine a series of plots that examine the differentials specificall
 \end{figure}
 
 
-
 \subsection{Logistic Regression}
 The plots in the prior section tell a pretty clear story; however, plots do not always give the entire picture. More rigorous analysis can be done using statistical testing via generalized linear models. The final logistic regression model included the additive effects of the following variables, along with the interaction between overtime and each of the differential variables. The results are shown in Table ~\ref{tab:Regression}. 
 
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & z value & Pr($>$$|$z$|$) \\ 
+  \hline
+(Intercept) & -0.14 & 0.12 & -1.18 & 0.24 \\ 
+  wfgp & -1.50 & 0.20 & -7.31 & 0.00 \\ 
+  lfgp & 1.46 & 0.21 & 6.96 & 0.00 \\ 
+  w3p & -0.26 & 0.10 & -2.54 & 0.01 \\ 
+  l3p & 0.44 & 0.11 & 3.95 & 0.00 \\ 
+  wftp & 0.35 & 0.10 & 3.67 & 0.00 \\ 
+  lftp & -0.51 & 0.08 & -6.21 & 0.00 \\ 
+  trdiff & 0.03 & 0.00 & 20.84 & 0.00 \\ 
+  astdiff & 0.14 & 0.00 & 49.23 & 0.00 \\ 
+  tdiff & -0.11 & 0.00 & -30.57 & 0.00 \\ 
+  sdiff & -0.02 & 0.00 & -6.44 & 0.00 \\ 
+  blkdiff & 0.14 & 0.00 & 36.77 & 0.00 \\ 
+  pfdiff & -0.14 & 0.00 & -54.42 & 0.00 \\ 
+  ot & -0.01 & 0.05 & -0.15 & 0.88 \\ 
+  trdiff:ot & -0.01 & 0.01 & -1.11 & 0.27 \\ 
+  sdiff:ot & -0.03 & 0.01 & -2.23 & 0.03 \\ 
+  blkdiff:ot & -0.02 & 0.01 & -1.46 & 0.14 \\ 
+  pfdiff:ot & 0.00 & 0.01 & 0.22 & 0.82 \\ 
+  astdiff:ot & -0.02 & 0.01 & -1.51 & 0.13 \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:Regression} Table of regression coefficients and their standard errors with associated standardized statistics and p-values.}
+\end{table}
+
 \subsection{Prediction}
-The goals for this analysis are specifically inferential in nature; however, it is worthwhile to examine the predictive efficacy of the model for picking winners and losers of any given game. We partitioned the original data into a training set on which we fit statsitical models and a testing set on which we tested our predictions from the final model. The testing set had 14276 games. The final model correctly classified 72.4 percent of the games as wins. 
+The goals for this analysis are specifically inferential in nature; however, it is worthwhile to examine the predictive efficacy of the model for picking winners and losers of any given game. We partitioned the original data into a training set on which we fit statsitical models and a testing set on which we tested our predictions from the final model. The testing set had 14276 games. The final model correctly classified 72.3 percent of the games as wins. This classification rate is better than a coin flip, but not good enough to be used in a reliable way. More sophisticated methods would likely need to be imployed to generate better classifications.\\
 
 
 \section{Discussion}
 
-The regression analysis indicates much of what we already know. Teams that score more points, turn the ball over less, and cut down on fouls tend to be more likely to win basketball games. There are, however, some more salient conclusions that can be drawn from this analysis; most of them pertain to the magnitude of the effect that each covariate has on the probability of winning. 
+The regression analysis indicates much of what we already know. Teams that score more points, turn the ball over less, and cut down on fouls tend to be more likely to win basketball games. There are, however, some more salient conclusions that can be drawn from this analysis; most of them pertain to the magnitude of the effect that each covariate has on the probability of winning. \\
 
-Although we found that each variable had a "statistically significant" impact on the probability of winning, some predictors' practical effects were more substantial than others. It should be noted that the sample size is so large in this analysis that these procedures have the ability to detect very small differences in win probabilities; small p-values do not indicate the presence of large practical effects. That being said, given the magnitude of the estimated effects and small p-values associated with the following variables, we believe that they are the most important to the analysis. 
+Although we found that each variable had a "statistically significant" impact on the probability of winning, some predictors' practical effects were more substantial than others. It should be noted that the sample size is so large in this analysis that these procedures have the ability to detect very small differences in win probabilities; small p-values do not indicate the presence of large practical effects. That being said, given the magnitude of the estimated effects and small p-values associated with the following variables, we believe that they are the most important to the analysis. \\
 
-In reference to the second research question, it seems clear that winning the turnover battle is associated with an increase in the probability of winning a basketball game. 
+In reference to the second research question, it seems clear that winning the turnover battle is associated with an increase in the probability of winning a basketball game. \\
 
-As an answer to question three, we have some evidence that the effect of steals may differ in games that went to overtime vs. those that did not. 
+As an answer to question three, we have some evidence that the effect of steals may differ in games that went to overtime vs. those that did not. \\
 
 
-Finally, these results should not be interpreted as causal. Each one of these variables, in and of themeselves, has an effect on the probability of winning. This methodology does not, however, illuminate how simultaneous increases on multiple covariates might impact the probability of winning, nor does it guarantee that a team that maximizes important predictors of winning will win. 
+Finally, these results should not be interpreted as causal. Each one of these variables, in and of themeselves, has an effect on the probability of winning. This methodology does not, however, illuminate how simultaneous increases on multiple covariates might impact the probability of winning, nor does it guarantee that a team that maximizes important predictors of winning will win. \\
 
 \section{Appendix}
 

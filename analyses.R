@@ -89,6 +89,11 @@ mean(resid(model1, type = "pearson")^2) #this looks as good as I've ever seen in
 #interactive model (interacted with the differentials)
 model2 <- glm(winloss ~ wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
 summary(model2)
+
+library(xtable)
+tab<-summary(model2)$coefficients
+tab<-round(tab,3)
+xtable(tab)
  
 mean(resid(model2, type = "pearson")^2)
 
