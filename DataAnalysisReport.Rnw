@@ -182,41 +182,42 @@ We can also examine a series of plots that examine the differentials specificall
 The plots in the prior section tell a pretty clear story; however, plots do not always give the entire picture. Since this analysis considers multiple variables, care should be taken in examining the effect of one variable with respect to the others.  More rigorous analysis can be done using statistical testing via generalized linear models. The final logistic regression model included the additive effects of the following variables, along with the interaction between overtime and each of the differential variables. The results are shown in Table ~\ref{tab:Regression}. 
 
 % latex table generated in R 3.3.2 by xtable 1.8-2 package
-% Thu Apr 13 14:41:03 2017
+% Thu Apr 13 15:26:54 2017
+
 \begin{table}[h]
 \centering
 \begin{tabular}{rrrr}
+\hline
+ & Estimate & 2.5 \% & 97.5 \% \\ 
   \hline
- & Est & 2.5 \% & 97.5 \% \\ 
-  \hline
-(Intercept) & 0.87 & 0.41 & 0.52 \\ 
-  wfgp & 0.22 & 0.13 & 0.25 \\ 
-  lfgp & 4.31 & 0.74 & 0.87 \\ 
-  w3p & 0.77 & 0.38 & 0.48 \\ 
-  l3p & 1.56 & 0.56 & 0.66 \\ 
-  wftp & 1.42 & 0.54 & 0.63 \\ 
-  lftp & 0.60 & 0.34 & 0.41 \\ 
-  trdiff & 1.03 & 0.51 & 0.51 \\ 
-  astdiff & 1.15 & 0.53 & 0.54 \\ 
-  tdiff & 0.90 & 0.47 & 0.47 \\ 
-  sdiff & 0.98 & 0.49 & 0.50 \\ 
-  blkdiff & 1.15 & 0.53 & 0.54 \\ 
-  pfdiff & 0.87 & 0.46 & 0.47 \\ 
-  ot & 0.99 & 0.47 & 0.52 \\ 
-  trdiff:ot & 0.99 & 0.50 & 0.50 \\ 
-  sdiff:ot & 0.97 & 0.49 & 0.50 \\ 
-  blkdiff:ot & 0.98 & 0.49 & 0.50 \\ 
-  pfdiff:ot & 1.00 & 0.50 & 0.51 \\ 
-  astdiff:ot & 0.98 & 0.49 & 0.50 \\ 
+(Intercept) & 0.87 & 0.71 & 1.07 \\ 
+  wfgp & 0.41 & 0.28 & 0.60 \\ 
+  w3p & 0.88 & 0.72 & 1.08 \\ 
+  wftp & 1.52 & 1.27 & 1.83 \\ 
+  trdiff & 1.03 & 1.03 & 1.04 \\ 
+  astdiff & 1.13 & 1.13 & 1.14 \\ 
+  tdiff & 0.89 & 0.88 & 0.90 \\ 
+  sdiff & 0.97 & 0.97 & 0.98 \\ 
+  blkdiff & 1.15 & 1.14 & 1.16 \\ 
+  pfdiff & 0.87 & 0.86 & 0.87 \\ 
+  ot & 1.02 & 0.93 & 1.13 \\ 
+  trdiff:ot & 1.00 & 0.98 & 1.01 \\ 
+  sdiff:ot & 0.98 & 0.96 & 1.00 \\ 
+  blkdiff:ot & 0.98 & 0.95 & 1.01 \\ 
+  pfdiff:ot & 1.00 & 0.98 & 1.02 \\ 
+  astdiff:ot & 0.99 & 0.97 & 1.01 \\ 
    \hline
 \end{tabular}
 \caption{\label{tab:Regression}}
 \end{table}
-
+\\
+\\
 \subsection{Factors Related to Winning}
-The results of the logistic regression shed some light on some fascinating results. Holding the effect of other covariates constant, we are 95 percent confident that the probability of 
+The estimates in the Regression table give the estimated odds that the home team won a given game. Confidence intervals that contain 1 imply that the true odds do not differ for different levels of a given predictor; this is considered a lack of evidence that the predictor is associated with changes in the probability of the home team winning the game. \\ 
 
+The results of the logistic regression shed some light on some fascinating findings. First, we have no evidence of an interaction between any of the covariates and the overtime variable except for steals. We have relatively strong evidence (p=0.03) that the in games that went to overtime, home teams with a one steal increase in steal differential had a 2 percent smaller change in their odds of winning the game than teams that did not go to overtime. \\
 
+For teams that increase their field goal percentage differential by one percent, the estimated odds ratio of the home team winning the game actually decreases by 59 percent, holding other variables constant. This effect is similar for three point percentage differential as well: The estimated odds of a home team winning decrease by 13 percent for games with one percent larger difference between the winning and losing team three point percentages. While these results may not seem intutitive, these percentages do not take into account the possibility that teams with higher percentages may simply have taken fewer shots and thus made a higher percentage of them, but not actually scored a great deal of points. Finally, interpretation that can be taken from the model is intuitive; the odds that the home team wins the game increase by between 26 and 83 percent for in games where the free-throw differential was one percent higher. \\
 
 \subsection{Prediction}
 The goals for this analysis are specifically inferential in nature; however, it is worthwhile to examine the predictive efficacy of the model for picking winners and losers of any given game. We partitioned the original data into a training set on which we fit statsitical models and a testing set on which we tested our predictions from the final model. The testing set had 14276 games. The final model correctly classified 72.3 percent of the games as wins. This classification rate is better than a coin flip, but not good enough to be used in a reliable way. More sophisticated methods would likely need to be imployed to generate better classifications.\\
@@ -229,8 +230,7 @@ Although we found that each variable had a "statistically significant" impact on
 
 In reference to the second research question, it seems clear that winning the turnover battle is associated with an increase in the probability of winning a basketball game. \\
 
-As an answer to question three, we have some evidence that the effect of steals may differ in games that went to overtime vs. those that did not. \\
-
+As an answer to question three, we have some evidence that the effect of steals may differ in games that went to overtime vs. those that did not. However, none of the other variables' effect on the probability of the home team winning tend to change in games that went to overtime vs. those that did not.  \\
 
 Finally, these results should not be interpreted as causal. Each one of these variables, in and of themeselves, has an effect on the probability of winning. This methodology does not, however, illuminate how simultaneous increases on multiple covariates might impact the probability of winning, nor does it guarantee that a team that maximizes important predictors of winning will win. \\
 
