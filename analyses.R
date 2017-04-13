@@ -1,6 +1,9 @@
 train<-read.csv("train.csv",header=TRUE)[,-c(1:2)]
 train<-train[-c(which(is.na(train$lftp))),]
 train<-train[-c(which(is.na(train$wftp))),]
+train$fgp<-train$wfgp-train$lfgp
+train$d3p<-train$w3p-train$l3p
+train$ftp<-train$wftp-train$lftp
 View(train)
 
 if(!require(psych)){install.packages("psych")}
@@ -87,7 +90,7 @@ mean(resid(model1, type = "pearson")^2) #this looks as good as I've ever seen in
 
 
 #interactive model (interacted with the differentials)
-model2 <- glm(winloss ~ (wfgp-lfgp) + (w3p - l3p) + (wftp - lftp) + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
+model2 <- glm(winloss ~ fgp + d3p + ftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
 summary(model2)
 
 library(xtable); library(boot)

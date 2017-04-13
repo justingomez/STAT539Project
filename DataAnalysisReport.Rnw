@@ -79,7 +79,7 @@ Overtime & OT\\
 \hline
 Field Goal Percentage  & FGP\\
 \hline
-Three Point Percentage & 3P\\
+Three Point Percentage & D3P\\
 \hline
 Free Throw Percentage & FTP\\
 \hline
@@ -187,28 +187,27 @@ The plots in the prior section tell a pretty clear story; however, plots do not 
 \begin{table}[h]
 \centering
 \begin{tabular}{rrrr}
-\hline
- & Estimate & 2.5 \% & 97.5 \% \\ 
   \hline
-(Intercept) & 0.87 & 0.71 & 1.07 \\ 
-  wfgp & 0.41 & 0.28 & 0.60 \\ 
-  w3p & 0.88 & 0.72 & 1.08 \\ 
-  wftp & 1.52 & 1.27 & 1.83 \\ 
+ & V1 & 2.5 \% & 97.5 \% \\ 
+  \hline
+(Intercept) & 0.81 & 0.78 & 0.84 \\ 
+  fgp & 0.23 & 0.17 & 0.32 \\ 
+  d3p & 0.71 & 0.61 & 0.83 \\ 
+  ftp & 1.56 & 1.37 & 1.76 \\ 
   trdiff & 1.03 & 1.03 & 1.04 \\ 
-  astdiff & 1.13 & 1.13 & 1.14 \\ 
-  tdiff & 0.89 & 0.88 & 0.90 \\ 
-  sdiff & 0.97 & 0.97 & 0.98 \\ 
-  blkdiff & 1.15 & 1.14 & 1.16 \\ 
+  astdiff & 1.15 & 1.14 & 1.15 \\ 
+  tdiff & 0.90 & 0.89 & 0.90 \\ 
+  sdiff & 0.98 & 0.97 & 0.98 \\ 
+  blkdiff & 1.15 & 1.15 & 1.16 \\ 
   pfdiff & 0.87 & 0.86 & 0.87 \\ 
-  ot & 1.02 & 0.93 & 1.13 \\ 
-  trdiff:ot & 1.00 & 0.98 & 1.01 \\ 
-  sdiff:ot & 0.98 & 0.96 & 1.00 \\ 
+  ot & 0.99 & 0.90 & 1.09 \\ 
+  trdiff:ot & 0.99 & 0.98 & 1.00 \\ 
+  sdiff:ot & 0.97 & 0.95 & 1.00 \\ 
   blkdiff:ot & 0.98 & 0.95 & 1.01 \\ 
   pfdiff:ot & 1.00 & 0.98 & 1.02 \\ 
-  astdiff:ot & 0.99 & 0.97 & 1.01 \\ 
+  astdiff:ot & 0.98 & 0.96 & 1.00 \\ 
    \hline
 \end{tabular}
-\caption{\label{tab:Regression}}
 \end{table}
 \\
 \\
