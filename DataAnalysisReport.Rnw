@@ -114,7 +114,6 @@ In this equation, $\pi_{i}$ is the probability that the home team wins, the $\be
 In generalized linear models, the link function relates the linear predictor (in this case, the data) to the response. The choice of link function plays an important role in the interpretation of the model. Two choices are common: the logit link and the probit link.  We choose the logit link, which allows for direct calculation of the probability of the home team winning a game. The probit link does not make a great deal of sense in this model because we have little reason to develop an underlying latent scale of player performance; it is more useful to coaches and players to understand the relationship between on-court performance as measured and the effect it has on the probability of winning.  \\
 
 
-
 \subsection{Descriptive Statistics}
 
 \subsubsection{Percentages}
