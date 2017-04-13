@@ -90,15 +90,18 @@ mean(resid(model1, type = "pearson")^2) #this looks as good as I've ever seen in
 model2 <- glm(winloss ~ wfgp + lfgp + w3p + l3p + wftp + lftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
 summary(model2)
 
-library(xtable)
+library(xtable); library(boot)
 tab<-summary(model2)$coefficients
 tab<-round(tab,3)
-tab2 <- exp(tab)
+tab2 <- inv.logit(tab)
 xtable(tab)
 
+confidence <- confint(model2)
+xtable(cbind((tab2)[,1],inv.logit(confidence))) 
 
-xtable(tab2)
-
+##
+model.potential <- glm(winloss ~ wfgp + w3p + wftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
+summary(model.potential)
 
  
 mean(resid(model2, type = "pearson")^2)
