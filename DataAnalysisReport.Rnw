@@ -233,15 +233,76 @@ As an answer to question three, we have some evidence that the effect of steals 
 
 Finally, these results should not be interpreted as causal. Each one of these variables, in and of themeselves, has an effect on the probability of winning. This methodology does not, however, illuminate how simultaneous increases on multiple covariates might impact the probability of winning, nor does it guarantee that a team that maximizes important predictors of winning will win. \\
 
-\section{Appendix}
-
-<<dataanalysis, include = FALSE>>=
-#model
-
+\newpage
+\section{Appendix - R code}
+<<dataanalysis, eval = FALSE>>=
+library(xtable); library(boot)
+train<-read.csv("train.csv",header=TRUE)[,-c(1:2)]
+train<-train[-c(which(is.na(train$lftp))),]
+train<-train[-c(which(is.na(train$wftp))),]
+train$fgp<-train$wfgp-train$lfgp
+train$d3p<-train$w3p-train$l3p
+train$ftp<-train$wftp-train$lftp
+plot(train$astdiff, train$winloss)
+cut.diff <- cut(train$astdiff,breaks = c(-17,-5,0,5,28))
+par(mfrow = c(3,2))
+#assist differential
+a <- sum(train$winloss[which(train$astdiff > 0)])/length(which(train$astdiff > 0))
+b <- sum(train$winloss[which(train$astdiff <= 0)])/length(which(train$astdiff <= 0))
+plot(seq(1,2), c(b,a),xaxt = "n", ylim = c(.4,.8), ylab = "Proportion of Wins", xlab = "Differential", type = "l", col ="orange", lwd = 2)
+axis(1, at = 1:2, labels = c("Negative", "Positive"))
+points(1:2,c(b,a), pch = 20)
+title("Assist Differential")
+#tdiff
+a <- sum(train$winloss[which(train$tdiff > 0)])/length(which(train$tdiff > 0))
+b <- sum(train$winloss[which(train$tdiff <= 0)])/length(which(train$tdiff <= 0))
+plot(seq(1,2), c(b,a),xaxt = "n", ylim = c(.4,.8), ylab = "Proportion of Wins", xlab = "Differential", type = "l", col ="green", lwd = 2)
+axis(1, at = 1:2, labels = c("Negative", "Positive"))
+points(1:2,c(b,a), pch = 20)
+title("Turnover Differential")
+#sdiff
+a <- sum(train$winloss[which(train$sdiff > 0)])/length(which(train$sdiff > 0))
+b <- sum(train$winloss[which(train$sdiff <= 0)])/length(which(train$sdiff <= 0))
+plot(seq(1,2), c(b,a),xaxt = "n", ylim = c(.4,.8), ylab = "Proportion of Wins", xlab = "Differential", type = "l", col ="dodgerblue", lwd = 2)
+axis(1, at = 1:2, labels = c("Negative", "Positive"))
+points(1:2,c(b,a), pch = 20)
+title("Steal Differential")
+#pfdiff
+a <- sum(train$winloss[which(train$pfdiff > 0)])/length(which(train$pfdiff > 0))
+b <- sum(train$winloss[which(train$pfdiff <= 0)])/length(which(train$pfdiff <= 0))
+plot(seq(1,2), c(b,a),xaxt = "n",ylim = c(.4,.8),ylab = "Proportion of Wins", xlab = "Differential", type = "l", col ="blue3", lwd = 2)
+axis(1, at = 1:2, labels = c("Negative", "Positive"))
+points(1:2,c(b,a), pch = 20)
+title("Personal Foul Differential")
+#blkdiff
+a <- sum(train$winloss[which(train$blkdiff > 0)])/length(which(train$blkdiff > 0))
+b <- sum(train$winloss[which(train$blkdiff <= 0)])/length(which(train$blkdiff <= 0))
+plot(seq(1,2), c(b,a),xaxt = "n", ylim = c(.4,.8), ylab = "Proportion of Wins", xlab = "Differential", type = "l", col ="yellowgreen", lwd = 2)
+axis(1, at = 1:2, labels = c("Negative", "Positive"))
+points(1:2,c(b,a), pch = 20)
+title("Block Differential")
+model2 <- glm(winloss ~ fgp + d3p + ftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
+tab<-summary(model2)$coefficients
+tab<-round(tab,3)
+tab2 <- exp(tab)
+xtable(tab)
+confidence <- confint(model2)
+xtable(cbind((tab2)[,1],exp(confidence))) 
+test <- read.csv("test.csv", header = TRUE)
+test<- test[-c(3239,5069),-c(1,2)]
+test$fgp<-test$wfgp-test$lfgp
+test$d3p<-test$w3p-test$l3p
+test$ftp<-test$wftp-test$lftp
+missclass<-function(mod){
+  p<-predict(mod,newdata=test,type="response")
+  for(i in 1:length(p)){
+    ifelse(p[i]>.5,p[i]<-1,p[i]<-0)
+  }
+  tab<-table(p,test$winloss)
+  miss<-1-sum(diag(tab)/sum(tab))
+}
+miss2<-missclass(model2)
+library(ResourceSelection)
+hl<-hoslem.test(model2$y,fitted(model2),g=10)
 @
-
-
-
-
-
 \end{document}
