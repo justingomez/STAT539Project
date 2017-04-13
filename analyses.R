@@ -171,6 +171,9 @@ MSE <- function(pred, obs) {mean((pred - obs)^2)}
 
 test <- read.csv("test.csv", header = TRUE)
 test<- test[-c(3239,5069),-c(1,2)]
+test$fgp<-test$wfgp-test$lfgp
+test$d3p<-test$w3p-test$l3p
+test$ftp<-test$wftp-test$lftp
 
 missclass<-function(mod){
   p<-predict(mod,newdata=test,type="response")
@@ -191,7 +194,7 @@ miss6<-missclass(model6)
 
 
 library(ResourceSelection)
-hl<-hoslem.test(model1$y,fitted(model1),g=10)
+hl<-hoslem.test(model2$y,fitted(model2),g=10)
 
 
 
