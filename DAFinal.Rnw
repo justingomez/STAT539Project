@@ -1,0 +1,247 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{caption}
+\pagestyle{fancy}
+\lhead{Gomez, Harmon}
+\chead{DA Final Report}
+\rhead{May 3, 2017}
+\setlength{\headheight}{20pt}
+\renewcommand{\headrulewidth}{0.2pt}
+\renewcommand{\footrulewidth}{0.2pt}
+\setlength{\parindent}{0pt}
+
+
+\begin{document}
+
+\title{Data Analysis Final Report}
+\author{Justin Gomez, Paul Harmon}
+\date{May 3, 2017}
+\maketitle
+
+\begin{abstract}
+College basketball, including the NCAA Tournament, is growing in popularity and scope across the country. Winning programs benefit from increased exposure, funding opportunities, and prestige. With a great deal riding on the success of the team's season, it would be interesting to know what aspects of the game contribute to the probability of winning. In order to analyze this, we fit binary logistic regression models to analyze data from thousands of college basketball games since the 2003 season in order to determine which variables were most strongly associated with the probability of the home team winning. \\
+%re-write
+Results indicated strong evidence that field Goal Percentage, Three Point Percentage, and Free Throw percentage for both winning and losing teams were associated with the probability of winning. Further, this analysis provides evidence the effect of steals on winning percentage may differ for games that go to overtime vs. those that do not.  \\
+\end{abstract}
+
+<<intro, include = FALSE, echo = FALSE>>=
+train<-read.csv("train.csv",header=TRUE)[,-c(1:2)]
+train<-train[-c(which(is.na(train$lftp))),]
+train<-train[-c(which(is.na(train$wftp))),]
+@
+\doublespacing
+\section{Introduction}
+\subsection{College Basketball: A Growing Sport}
+NCAA College Basketball is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. It is therefore of interest not only to coaches and fans but also to campus administrators to determine which factors are most associated with winning basketball games. \\
+
+\subsection{Predictive Analytics in NCAA Basketball}
+Fans watching the NCAA Tournament are increasingly interested in making bets by filling out brackets and predicting each winner in the seven rounds of the tournament; this has led to a proliferation of predictive modeling in college basketball, both academic and casual. Some methods like those used by Harville and Smith (1992) make use of linear models to predict outcomes of games; however, more recent focus has been on so-called ``black box" predictive analytics. This analysis is focused more on identifying metrics that are associated with the probabiliity of a team winning a game; therefore, we use generalized linear models to analzye the data. The main questions of interest are as follows: \\
+
+\begin{enumerate}
+\item %1
+Which factors are most important in helping a home team win a game?
+\item %2
+Do the effects of each covariate on the probability of winning change in games that go to overtime?
+\end{enumerate}
+
+We focus mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given game, and thus the main goal of this analysis is statsitical inference. However, since we are developing a model for the probability of the home team winning, evaluating the model's predictive ability is also of secondary interest. To do this, we split our full data set into two sets: a training set comprised of 70\% of the data, obatined through stratified random sampling by season; and a testing set comprised of the remaining 30\% of the data. We fit our generalized linear models on the training set, and then predict whether home teams won or lost using our testing data. Since we know the actual outcome of each game, we can find classification rates for our predictions to judge the performance of the model.
+
+\section{Data and Methods}
+
+\subsection{The Data}
+The data were obtained from a repository managed by Kaggle, Inc. related to the March Machine Learning Mania competition in 2016. We settled on a reduced set of ten predictor variables to include in our study of our single binary response: whether the home team won or not. Our dataset contains more than sixty-four thousand games spanning fourteen seasons of basketball. AUTOCORRELATION? For each game, we can have a slew of performance statistics for both teams summarized as differences (differentials) in percentages or raw counts. For percentage predictors, we have field goal, three-point, and free-throw percentages for both the winning and the losing teams, and will include this information in the model by subtracting the losing team values from the winning team values. All percentages were calculated as the number of made shots divided by the number of attempted shots for that specific shot type. For raw counts, we will be considering total rebounds (offensive rebounds plus defensive rebounds), assists, turnovers, steals, blocks, and personal fouls for both the winning and losing teams. Again, differentials are found for each count as the winning team's numbers minus the losing team's numbers. For instance, a positive rebound differential means that the winning team had more total rebounds than the losing team; a negative value would imply the opposite. Whether or not a game goes into overtime is of interest as well as it may provide some insight into the level of competition between the teams.
+
+\subsection{Generalized Linear Models}
+The response in this analysis is binary; either the home team won the game and is assigned a value of ``1" or the home team lost the game, in which case it is assigned a ``0". The binary nature of this response variable allows us to perform logistic regression using the logit link function. In the context of our study, the logit is the log odds of the home team winning. The logit link is used as it is the canonical link function, which has properties that we like to take advantage of when fitting these models as discussed in Section 2.3. Using this generalized linear model allows us to model the probability that the home team wins as function of our suite of predictor variables. Equation~\ref{eq:logit} is the general form of the model that we will be fitting.
+
+\begin{equation} \label{eq:logit}
+logit(\pi_{i})=log\Big(\frac{\pi_{i}}{1-\pi_{i}}\Big)=\beta_{0}+\sum_{j=1}^{p} \beta_{j}x_{ij}
+\end{equation}
+
+In this equation, $\pi_{i}$ is the probability that the home team wins in the $i^{th}$ game, the $\beta_{j}$'s are the parameters that we are interested in estimating, and the $x_{ij}$'s are our covariates. Using the statistical software R (R Core Team 2017), we can fit a logistic regression equation using the function \texttt{glm} in the \textt{stats} package. With this function, we can specify the predictor variables to be used, as well as the family the response follows and the link function to be used.
+
+\subsection{Link Functions}
+In generalized linear models, the link function relates the linear predictors (the $x_{ij}$) to the response. The choice of link function plays an important role in the interpretation of the model. Two choices are common: the logit link and the probit link.  We choose the logit link, which allows for direct calculation of the probability of the home team winning a game. The probit link does not make a great deal of sense in this model because we have little reason to develop an underlying latent scale of player performance; it is more useful to coaches and players to understand the relationship between on-court performance as measured and the effect it has on the probability of winning.
+
+\subsection{Descriptive Statistics}
+
+\subsubsection{Differentials: Percentages}
+The percentage variables give some interesting information about the teams that won at home.  In general, we would expect that teams that win games would tend to make a higher percentage of their shots attempted; Table~\ref{tab:percentsum} and Figure~\ref{fig:percentbox} indicate that this is the case, in general. For these three variables, we see that the winning team does not always perform better (indicated by the negative values we see for the minimums). For field goals, this happens less than 25\% of the time, but for three pointers and free throws, this happens just over 25\% of the time. The boxplots give no indication of skew for any of the three variables, but we do see a great deal of variability in the free throw percentage variable.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ & Field Goals & Three Pointers & Free Throws \\ 
+  \hline
+Minimum & -0.29 & -0.60 & -0.86 \\ 
+  Median & 0.07 & 0.07 & 0.04 \\ 
+  Mean & 0.07 & 0.07 & 0.04 \\ 
+  Maximum & 0.44 & 0.73 & 1.00 \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:percentsum} Table of summary statistics for the percentage variables.}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.75\textwidth]{percentbox.jpeg}
+\caption{\label{fig:percentbox} Boxplots for the three percentage variables.}
+\end{figure}
+
+\subsubsection{Differentials: Counts}
+Recall that each differential refers to the difference between the number of the given statistic for the winning team subtracted by the value for the losing team. Table~\ref{tab:diffsum} and Figure~\ref{fig:diffbox} help us understand the differences in the six count differentials.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrrr}
+  \hline
+ & Turnovers & Assists & Steals & Blocks & Personal Fouls & Total Rebounds \\ 
+  \hline
+Minimum & -31.00 & -17.00 & -18.00 & -16.00 & -24.00 & -31.00 \\ 
+  Median & -1.00 & 3.00 & 1.00 & 1.00 & -2.00 & 4.00 \\ 
+  Mean & -1.42 & 3.33 & 1.07 & 1.01 & -2.42 & 3.85 \\ 
+  Maximum & 20.00 & 31.00 & 22.00 & 19.00 & 20.00 & 48.00 \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:diffsum} Table of summary statistics for the six raw count variables.}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.75\textwidth]{diffbox.jpeg}
+\caption{\label{fig:diffbox} Boxplots for the six raw count variables.}
+\end{figure}
+
+It should first be pointed out that negative numbers are expected for turnovers and personal fouls as the winning team is expected to turn the ball over less and commit fewer personal fouls. These summaries statistics in Table~\ref{tab:diffsum} indicate much of what would be expected; however, there are a few values that indicate some fascinating game results. At some point, a team that was out-rebounded by thirty-one rebounds managed to win the game; moreover, a team that turned the ball over twenty times also managed to escape with a win. For the two covariates that we expect to be negative, we see negative means. Again, mean and median values are close, and the boxplots do not indicate heavy skew for any variable. Total rebounds contains the most variablility of these six, and blocks contains the least variability. Taken together, these statistics imply that there is no sure-fire way to win a basketball game. A team can out-rebound its opponent, it can win the turnover battle, or dominate its opponent on any single statistic; however, without a well-rounded performance on all metrics, it can be very possible to lose. 
+
+\subsection{Logistic Regression}
+In order to fit a model to answer our research questions, we fit several models considering a variety of main effects and interactions. The final model was selected through an AIC comparison. A Hosmer-Lemeshow goodness-of-fit test was also conducted on the final model. This test yielded a test-statistic of 10.291 on eight degrees of freedom, and with an associated p-value of 0.2452, there is no evidence that the model is an inadequate fit for the data. The results of the regression are shown in Table ~\ref{tab:regression}. 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ & Lower Bound & Estimate & Upper Bound \\ 
+  \hline
+Intercept & 0.78 & 0.81 & 0.84 \\ 
+  Overtime & 0.99 & 1.10 & 1.23 \\ 
+  Field Goal \% & 0.18 & 0.26 & 0.37 \\ 
+  Three Point \% & 0.57 & 0.67 & 0.79 \\ 
+  Free Throw \% & 1.37 & 1.56 & 1.78 \\ 
+  Turnovers & 0.89 & 0.90 & 0.90 \\ 
+  Assists & 1.13 & 1.14 & 1.15 \\ 
+  Steals & 0.97 & 0.97 & 0.98 \\ 
+  Blocks & 1.15 & 1.16 & 1.17 \\ 
+  Personal Fouls & 0.86 & 0.87 & 0.87 \\ 
+  Total Rebounds & 1.03 & 1.03 & 1.04 \\ 
+  Overtime:Field Goal \% & 0.00 & 0.02 & 0.12 \\ 
+  Overtime:Turnovers & 1.03 & 1.06 & 1.09 \\ 
+  Overtime:Total Rebounds & 0.96 & 0.97 & 0.99 \\ 
+   \hline
+\end{tabular}
+\caption{\label{tab:regression} Regression table summarizing the estimated odds ratios from the fitted generalized linear model and bounds for the associated 95\% confidence intervals.}
+\end{table}
+
+\subsection{Factors Related to Winning}
+The estimates in the regression table give the estimated odds that the home team won a given game. Confidence intervals that contain 1 imply that the true odds do not differ for different levels of a given predictor; this is considered a lack of evidence that the predictor is associated with changes in the probability of the home team winning the game. \\ 
+
+The results of the logistic regression shed some light on some fascinating findings. First, we have no evidence of an interaction between any of the covariates and the overtime variable except for steals. We have relatively strong evidence (p=0.03) that the in games that went to overtime, home teams with a one steal increase in steal differential had a 2 percent smaller change in their odds of winning the game than teams that did not go to overtime. \\
+
+For teams that increase their field goal percentage differential by one percent, the estimated odds ratio of the home team winning the game actually decreases by 87 percent, holding other variables constant. This effect is similar for three point percentage differential as well: The estimated odds of a home team winning decrease by 30 percent for games with one percent larger difference between the winning and losing team three point percentages. While these results may not seem intutitive, these percentages do not take into account the possibility that teams with higher percentages may simply have taken fewer shots and thus made a higher percentage of them, but not actually scored a great deal of points. Finally, interpretation that can be taken from the model is intuitive; the odds that the home team wins the game increase by between 37 and 76 percent for in games where the free-throw differential was one percent higher. \\
+
+\subsection{Prediction} 
+The goals for this analysis are specifically inferential in nature; however, it is worthwhile to examine the predictive efficacy of the model for picking winners and losers of any given game. We partitioned the original data into a training set on which we fit statsitical models and a testing set on which we tested our predictions from the final model. The testing set had 14276 games. The final model correctly classified 72.3 percent of the games as wins. This classification rate is better than a coin flip, but not good enough to be used in a reliable way. More sophisticated methods would likely need to be imployed to generate better classifications.\\
+
+
+\section{Discussion}
+The regression analysis indicates much of what we already know. Teams that score more points, turn the ball over less, and cut down on fouls tend to be more likely to win basketball games. There are, however, some more salient conclusions that can be drawn from this analysis; most of them pertain to the magnitude of the effect that each covariate has on the probability of winning. \\
+
+Although we found that each variable had a "statistically significant" impact on the probability of winning, some predictors' practical effects were more substantial than others. It should be noted that the sample size is so large in this analysis that these procedures have the ability to detect very small differences in win probabilities; small p-values do not indicate the presence of large practical effects. That being said, given the magnitude of the estimated effects and small p-values associated with the following variables, we believe that they are the most important to the analysis. \\
+
+In reference to the second research question, it seems clear that winning the turnover battle is associated with an increase in the probability of winning a basketball game. \\
+
+As an answer to question three, we have some evidence that the effect of steals may differ in games that went to overtime vs. those that did not. However, none of the other variables' effect on the probability of the home team winning tend to change in games that went to overtime vs. those that did not.  \\
+
+Finally, these results should not be interpreted as causal. Each one of these variables, in and of themeselves, has an effect on the probability of winning. This methodology does not, however, illuminate how simultaneous increases on multiple covariates might impact the probability of winning, nor does it guarantee that a team that maximizes important predictors of winning will win. \\
+
+\newpage
+\section{Appendix - R code}
+<<dataanalysis, eval = FALSE>>=
+library(xtable); library(boot)
+train<-read.csv("train.csv",header=TRUE)[,-c(1:2)]
+train<-train[-c(which(is.na(train$lftp))),]
+train<-train[-c(which(is.na(train$wftp))),]
+train$fgp<-train$wfgp-train$lfgp
+train$d3p<-train$w3p-train$l3p
+train$ftp<-train$wftp-train$lftp
+plot(train$astdiff, train$winloss)
+cut.diff <- cut(train$astdiff,breaks = c(-17,-5,0,5,28))
+par(mfrow = c(3,2))
+#assist differential
+a <- sum(train$winloss[which(train$astdiff > 0)])/length(which(train$astdiff > 0))
+b <- sum(train$winloss[which(train$astdiff <= 0)])/length(which(train$astdiff <= 0))
+plot(seq(1,2), c(b,a),xaxt = "n", ylim = c(.4,.8), ylab = "Proportion of Wins", xlab = "Differential", type = "l", col ="orange", lwd = 2)
+axis(1, at = 1:2, labels = c("Negative", "Positive"))
+points(1:2,c(b,a), pch = 20)
+title("Assist Differential")
+#tdiff
+a <- sum(train$winloss[which(train$tdiff > 0)])/length(which(train$tdiff > 0))
+b <- sum(train$winloss[which(train$tdiff <= 0)])/length(which(train$tdiff <= 0))
+plot(seq(1,2), c(b,a),xaxt = "n", ylim = c(.4,.8), ylab = "Proportion of Wins", xlab = "Differential", type = "l", col ="green", lwd = 2)
+axis(1, at = 1:2, labels = c("Negative", "Positive"))
+points(1:2,c(b,a), pch = 20)
+title("Turnover Differential")
+#sdiff
+a <- sum(train$winloss[which(train$sdiff > 0)])/length(which(train$sdiff > 0))
+b <- sum(train$winloss[which(train$sdiff <= 0)])/length(which(train$sdiff <= 0))
+plot(seq(1,2), c(b,a),xaxt = "n", ylim = c(.4,.8), ylab = "Proportion of Wins", xlab = "Differential", type = "l", col ="dodgerblue", lwd = 2)
+axis(1, at = 1:2, labels = c("Negative", "Positive"))
+points(1:2,c(b,a), pch = 20)
+title("Steal Differential")
+#pfdiff
+a <- sum(train$winloss[which(train$pfdiff > 0)])/length(which(train$pfdiff > 0))
+b <- sum(train$winloss[which(train$pfdiff <= 0)])/length(which(train$pfdiff <= 0))
+plot(seq(1,2), c(b,a),xaxt = "n",ylim = c(.4,.8),ylab = "Proportion of Wins", xlab = "Differential", type = "l", col ="blue3", lwd = 2)
+axis(1, at = 1:2, labels = c("Negative", "Positive"))
+points(1:2,c(b,a), pch = 20)
+title("Personal Foul Differential")
+#blkdiff
+a <- sum(train$winloss[which(train$blkdiff > 0)])/length(which(train$blkdiff > 0))
+b <- sum(train$winloss[which(train$blkdiff <= 0)])/length(which(train$blkdiff <= 0))
+plot(seq(1,2), c(b,a),xaxt = "n", ylim = c(.4,.8), ylab = "Proportion of Wins", xlab = "Differential", type = "l", col ="yellowgreen", lwd = 2)
+axis(1, at = 1:2, labels = c("Negative", "Positive"))
+points(1:2,c(b,a), pch = 20)
+title("Block Differential")
+model2 <- glm(winloss ~ fgp + d3p + ftp + trdiff + astdiff + tdiff + sdiff + blkdiff + pfdiff + ot*trdiff + ot*sdiff + ot*blkdiff + ot*pfdiff + ot*astdiff, family = binomial(link = "logit"), data = train)
+tab<-summary(model2)$coefficients
+tab<-round(tab,3)
+tab2 <- exp(tab)
+xtable(tab)
+confidence <- confint(model2)
+xtable(cbind((tab2)[,1],exp(confidence))) 
+test <- read.csv("test.csv", header = TRUE)
+test<- test[-c(3239,5069),-c(1,2)]
+test$fgp<-test$wfgp-test$lfgp
+test$d3p<-test$w3p-test$l3p
+test$ftp<-test$wftp-test$lftp
+missclass<-function(mod){
+  p<-predict(mod,newdata=test,type="response")
+  for(i in 1:length(p)){
+    ifelse(p[i]>.5,p[i]<-1,p[i]<-0)
+  }
+  tab<-table(p,test$winloss)
+  miss<-1-sum(diag(tab)/sum(tab))
+}
+miss2<-missclass(model2)
+library(ResourceSelection)
+hl<-hoslem.test(model2$y,fitted(model2),g=10)
+@
+\end{document}
