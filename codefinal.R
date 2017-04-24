@@ -62,12 +62,13 @@ anova(mod2,mod1,test="LRT") #looks like we want them model with 3 interactions
 mod3<-update(mod2,.~.-ot:fgp-ot:todiff-ot:trdiff,data=train)
 anova(mod3,mod2,test="LRT") #only main effects would be a bad idea I guess
 
-AIC(mod1,mod2,mod3) #model 2 wins!
+tab4<-AIC(mod1,mod2,mod3) #model 2 wins!
+rownames(tab4)<-c("Full Interaction Model","Reducted Interaction Model","Additive Model")
 hoslem.test(mod2$y,fitted(mod2),g=10)
 
 ci<-confint(mod2)
-tab4<-data.frame(low=round(exp(ci[,1]),3),est=round(exp(summary(mod2)$coefficients[,1]),3),up=round(exp(ci[,2]),3))
-colnames(tab4)<-c("Lower Bound","Estimate","Upper Bound")
-rownames(tab4)<-c("Intercept","Overtime","Field Goal %","Three Point %","Free Throw %","Turnovers","Assists","Steals","Blocks","Personal Fouls","Total Rebounds","Overtime:Field Goal %","Overtime:Turnovers","Overtime:Total Rebounds")
-xtable(tab4) #table for estimated odds ratios and 95% CI
+tab5<-data.frame(low=round(exp(ci[,1]),3),est=round(exp(summary(mod2)$coefficients[,1]),3),up=round(exp(ci[,2]),3))
+colnames(tab5)<-c("Lower Bound","Estimate","Upper Bound")
+rownames(tab5)<-c("Intercept","Overtime","Field Goal %","Three Point %","Free Throw %","Turnovers","Assists","Steals","Blocks","Personal Fouls","Total Rebounds","Overtime:Field Goal %","Overtime:Turnovers","Overtime:Total Rebounds")
+xtable(tab5) #table for estimated odds ratios and 95% CI
 

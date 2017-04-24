@@ -31,18 +31,13 @@ College basketball, including the NCAA Tournament, is growing in popularity and 
 Results indicated strong evidence that field Goal Percentage, Three Point Percentage, and Free Throw percentage for both winning and losing teams were associated with the probability of winning. Further, this analysis provides evidence the effect of steals on winning percentage may differ for games that go to overtime vs. those that do not.  \\
 \end{abstract}
 
-<<intro, include = FALSE, echo = FALSE>>=
-train<-read.csv("train.csv",header=TRUE)[,-c(1:2)]
-train<-train[-c(which(is.na(train$lftp))),]
-train<-train[-c(which(is.na(train$wftp))),]
-@
 \doublespacing
 \section{Introduction}
 \subsection{College Basketball: A Growing Sport}
-NCAA College Basketball is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. It is therefore of interest not only to coaches and fans but also to campus administrators to determine which factors are most associated with winning basketball games. \\
+NCAA College Basketball is a major cornerstone of college sports. While the games themselves have tremendous economic impact, college basketball's effects reach beyond the court. Broadcasting the tournament cost CBS nearly 10 billion dollars in 2016 (Ogus 2016). The effect on the schools’ academics is palpable, too; Smith (2008) notes that “a college’s profile will increase with big-time athletics, as will the perception of the school itself”. Indeed, some have even contended the increased visibility has impacts on academic metrics at those schools including increased student quality and retention. It is therefore of interest not only to coaches and fans but also to campus administrators to determine which factors are most associated with winning basketball games.
 
 \subsection{Predictive Analytics in NCAA Basketball}
-Fans watching the NCAA Tournament are increasingly interested in making bets by filling out brackets and predicting each winner in the seven rounds of the tournament; this has led to a proliferation of predictive modeling in college basketball, both academic and casual. Some methods like those used by Harville and Smith (1992) make use of linear models to predict outcomes of games; however, more recent focus has been on so-called ``black box" predictive analytics. This analysis is focused more on identifying metrics that are associated with the probabiliity of a team winning a game; therefore, we use generalized linear models to analzye the data. The main questions of interest are as follows: \\
+Fans watching the NCAA Tournament are increasingly interested in making bets by filling out brackets and predicting each winner in the seven rounds of the tournament; this has led to a proliferation of predictive modeling in college basketball, both academic and casual. Some methods like those used by Harville and Smith (1992) make use of linear models to predict outcomes of games; however, more recent focus has been on so-called ``black box" predictive analytics. This analysis is focused more on identifying metrics that are associated with the probabiliity of a team winning a game; therefore, we use generalized linear models to analzye the data. The main questions of interest are as follows:
 
 \begin{enumerate}
 \item %1
@@ -90,6 +85,7 @@ Minimum & -0.29 & -0.60 & -0.86 \\
 \caption{\label{tab:percentsum} Table of summary statistics for the percentage variables.}
 \end{table}
 
+\vspace{10pt}
 \begin{figure}[h]
 \centering
 \includegraphics[width=.75\textwidth]{percentbox.jpeg}
@@ -123,54 +119,59 @@ Minimum & -31.00 & -17.00 & -18.00 & -16.00 & -24.00 & -31.00 \\
 It should first be pointed out that negative numbers are expected for turnovers and personal fouls as the winning team is expected to turn the ball over less and commit fewer personal fouls. These summaries statistics in Table~\ref{tab:diffsum} indicate much of what would be expected; however, there are a few values that indicate some fascinating game results. At some point, a team that was out-rebounded by thirty-one rebounds managed to win the game; moreover, a team that turned the ball over twenty times also managed to escape with a win. For the two covariates that we expect to be negative, we see negative means. Again, mean and median values are close, and the boxplots do not indicate heavy skew for any variable. Total rebounds contains the most variablility of these six, and blocks contains the least variability. Taken together, these statistics imply that there is no sure-fire way to win a basketball game. A team can out-rebound its opponent, it can win the turnover battle, or dominate its opponent on any single statistic; however, without a well-rounded performance on all metrics, it can be very possible to lose. 
 
 \subsection{Logistic Regression}
-In order to fit a model to answer our research questions, we fit several models considering a variety of main effects and interactions. The final model was selected through an AIC comparison. A Hosmer-Lemeshow goodness-of-fit test was also conducted on the final model. This test yielded a test-statistic of 10.291 on eight degrees of freedom, and with an associated p-value of 0.2452, there is no evidence that the model is an inadequate fit for the data. The results of the regression are shown in Table ~\ref{tab:regression}. 
+In order to fit a model to answer our research questions, we fit several models considering a variety of main effects and interactions. The final model was selected through an AIC comparison. A Hosmer-Lemeshow goodness-of-fit test was also conducted on the final model. This test yielded a test-statistic of 10.291 on eight degrees of freedom, and with an associated p-value of 0.2452, there is no evidence that the model is an inadequate fit for the data. The theoretical model following the form of Equation~\ref{eq:logit} is given in Equation~\ref{eq:finalmodel}, and the results of the regression are shown in Table ~\ref{tab:regression}. 
+
+\begin{multline} \label{eq:finalmodel}
+logit(\pi_{i})=\beta_{0}+\beta_{1}ot_{i}+\beta_{2}fgp_{i}+\beta_{3}tpp_{i}+\beta_{4}ftp_{i}+\beta_{5}todiff_{i}+\beta_{6}astdiff_{i}+\beta_{7}stldiff_{i}\\
++\beta_{8}blkdiff_{i}+\beta_{9}pfdiff_{i}+\beta_{10}ot_{i}\times fgp_{i}+\beta_{11}ot_{i}\times todiff_{i} +\beta_{12}ot_{i}\times trdiff_{i}
+\end{multline}
 
 \begin{table}[h]
 \centering
-\begin{tabular}{rrrr}
+\begin{tabular}{rrrrr}
   \hline
- & Lower Bound & Estimate & Upper Bound \\ 
+ Term & Abbreviation & Lower Bound & Estimate & Upper Bound \\ 
   \hline
-Intercept & 0.78 & 0.81 & 0.84 \\ 
-  Overtime & 0.99 & 1.10 & 1.23 \\ 
-  Field Goal \% & 0.18 & 0.26 & 0.37 \\ 
-  Three Point \% & 0.57 & 0.67 & 0.79 \\ 
-  Free Throw \% & 1.37 & 1.56 & 1.78 \\ 
-  Turnovers & 0.89 & 0.90 & 0.90 \\ 
-  Assists & 1.13 & 1.14 & 1.15 \\ 
-  Steals & 0.97 & 0.97 & 0.98 \\ 
-  Blocks & 1.15 & 1.16 & 1.17 \\ 
-  Personal Fouls & 0.86 & 0.87 & 0.87 \\ 
-  Total Rebounds & 1.03 & 1.03 & 1.04 \\ 
-  Overtime:Field Goal \% & 0.00 & 0.02 & 0.12 \\ 
-  Overtime:Turnovers & 1.03 & 1.06 & 1.09 \\ 
-  Overtime:Total Rebounds & 0.96 & 0.97 & 0.99 \\ 
+Intercept & & 0.78 & 0.81 & 0.84 \\ 
+  Overtime & ot & 0.99 & 1.10 & 1.23 \\ 
+  Field Goal \% & fgp & 0.18 & 0.26 & 0.37 \\ 
+  Three Point \% & tpp & 0.57 & 0.67 & 0.79 \\ 
+  Free Throw \% & ftp & 1.37 & 1.56 & 1.78 \\ 
+  Turnovers & todiff & 0.89 & 0.90 & 0.90 \\ 
+  Assists & astdiff & 1.13 & 1.14 & 1.15 \\ 
+  Steals & stldiff & 0.97 & 0.97 & 0.98 \\ 
+  Blocks & blkdiff & 1.15 & 1.16 & 1.17 \\ 
+  Personal Fouls & pfdiff & 0.86 & 0.87 & 0.87 \\ 
+  Total Rebounds & trdiff & 1.03 & 1.03 & 1.04 \\ 
+  Overtime:Field Goal \% & ot\times fgp & 0.00 & 0.02 & 0.12 \\ 
+  Overtime:Turnovers & ot\times todiff & 1.03 & 1.06 & 1.09 \\ 
+  Overtime:Total Rebounds & ot\times trdiff & 0.96 & 0.97 & 0.99 \\ 
    \hline
 \end{tabular}
 \caption{\label{tab:regression} Regression table summarizing the estimated odds ratios from the fitted generalized linear model and bounds for the associated 95\% confidence intervals.}
 \end{table}
 
 \subsection{Factors Related to Winning}
-The estimates in the regression table give the estimated odds that the home team won a given game. Confidence intervals that contain 1 imply that the true odds do not differ for different levels of a given predictor; this is considered a lack of evidence that the predictor is associated with changes in the probability of the home team winning the game. \\ 
+The estimates in the regression table give the estimated odds ratio that the home team won a given game. Confidence intervals that contain 1 imply that the true odds do not differ for different levels of a given predictor; this is considered a lack of evidence that the predictor is associated with changes in the probability of the home team winning the game.
 
-The results of the logistic regression shed some light on some fascinating findings. First, we have no evidence of an interaction between any of the covariates and the overtime variable except for steals. We have relatively strong evidence (p=0.03) that the in games that went to overtime, home teams with a one steal increase in steal differential had a 2 percent smaller change in their odds of winning the game than teams that did not go to overtime. \\
+The results of the logistic regression shed some light on some fascinating findings. First, we have no evidence of an interaction between any of the covariates and the overtime variable except for steals. We have relatively strong evidence (p=0.03) that the in games that went to overtime, home teams with a one steal increase in steal differential had a 2 percent smaller change in their odds of winning the game than teams that did not go to overtime.
 
-For teams that increase their field goal percentage differential by one percent, the estimated odds ratio of the home team winning the game actually decreases by 87 percent, holding other variables constant. This effect is similar for three point percentage differential as well: The estimated odds of a home team winning decrease by 30 percent for games with one percent larger difference between the winning and losing team three point percentages. While these results may not seem intutitive, these percentages do not take into account the possibility that teams with higher percentages may simply have taken fewer shots and thus made a higher percentage of them, but not actually scored a great deal of points. Finally, interpretation that can be taken from the model is intuitive; the odds that the home team wins the game increase by between 37 and 76 percent for in games where the free-throw differential was one percent higher. \\
+For teams that increase their field goal percentage differential by one percent, the estimated odds ratio of the home team winning the game actually decreases by 87 percent, holding other variables constant. This effect is similar for three point percentage differential as well: The estimated odds of a home team winning decrease by 30 percent for games with one percent larger difference between the winning and losing team three point percentages. While these results may not seem intutitive, these percentages do not take into account the possibility that teams with higher percentages may simply have taken fewer shots and thus made a higher percentage of them, but not actually scored a great deal of points. Finally, interpretation that can be taken from the model is intuitive; the odds that the home team wins the game increase by between 37 and 76 percent for in games where the free-throw differential was one percent higher.
 
 \subsection{Prediction} 
-The goals for this analysis are specifically inferential in nature; however, it is worthwhile to examine the predictive efficacy of the model for picking winners and losers of any given game. We partitioned the original data into a training set on which we fit statsitical models and a testing set on which we tested our predictions from the final model. The testing set had 14276 games. The final model correctly classified 72.3 percent of the games as wins. This classification rate is better than a coin flip, but not good enough to be used in a reliable way. More sophisticated methods would likely need to be imployed to generate better classifications.\\
+The goals for this analysis are specifically inferential in nature; however, it is worthwhile to examine the predictive efficacy of the model for picking winners and losers of any given game. We partitioned the original data into a training set on which we fit statsitical models and a testing set on which we tested our predictions from the final model. The testing set had 14276 games. The final model correctly classified 72.3 percent of the games as wins. This classification rate is better than a coin flip, but not good enough to be used in a reliable way. More sophisticated methods would likely need to be imployed to generate better classifications.
 
 
 \section{Discussion}
-The regression analysis indicates much of what we already know. Teams that score more points, turn the ball over less, and cut down on fouls tend to be more likely to win basketball games. There are, however, some more salient conclusions that can be drawn from this analysis; most of them pertain to the magnitude of the effect that each covariate has on the probability of winning. \\
+The regression analysis indicates much of what we already know. Teams that score more points, turn the ball over less, and cut down on fouls tend to be more likely to win basketball games. There are, however, some more salient conclusions that can be drawn from this analysis; most of them pertain to the magnitude of the effect that each covariate has on the probability of winning.
 
-Although we found that each variable had a "statistically significant" impact on the probability of winning, some predictors' practical effects were more substantial than others. It should be noted that the sample size is so large in this analysis that these procedures have the ability to detect very small differences in win probabilities; small p-values do not indicate the presence of large practical effects. That being said, given the magnitude of the estimated effects and small p-values associated with the following variables, we believe that they are the most important to the analysis. \\
+Although we found that each variable had a "statistically significant" impact on the probability of winning, some predictors' practical effects were more substantial than others. It should be noted that the sample size is so large in this analysis that these procedures have the ability to detect very small differences in win probabilities; small p-values do not indicate the presence of large practical effects. That being said, given the magnitude of the estimated effects and small p-values associated with the following variables, we believe that they are the most important to the analysis. 
 
-In reference to the second research question, it seems clear that winning the turnover battle is associated with an increase in the probability of winning a basketball game. \\
+In reference to the second research question, it seems clear that winning the turnover battle is associated with an increase in the probability of winning a basketball game. 
 
-As an answer to question three, we have some evidence that the effect of steals may differ in games that went to overtime vs. those that did not. However, none of the other variables' effect on the probability of the home team winning tend to change in games that went to overtime vs. those that did not.  \\
+As an answer to question three, we have some evidence that the effect of steals may differ in games that went to overtime vs. those that did not. However, none of the other variables' effect on the probability of the home team winning tend to change in games that went to overtime vs. those that did not.  
 
-Finally, these results should not be interpreted as causal. Each one of these variables, in and of themeselves, has an effect on the probability of winning. This methodology does not, however, illuminate how simultaneous increases on multiple covariates might impact the probability of winning, nor does it guarantee that a team that maximizes important predictors of winning will win. \\
+Finally, these results should not be interpreted as causal. Each one of these variables, in and of themeselves, has an effect on the probability of winning. This methodology does not, however, illuminate how simultaneous increases on multiple covariates might impact the probability of winning, nor does it guarantee that a team that maximizes important predictors of winning will win. 
 
 \newpage
 \section{Appendix - R code}
