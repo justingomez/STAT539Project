@@ -9,6 +9,13 @@ for(i in 1:ncol(train)) {
   miss[i]<-length(which(is.na(train[,i])))
 }
 train<-train[-c(which(is.na(train[,11]))),]
+
+test<-read.csv("test.csv",header=TRUE)[,-c(1,2,20)]
+miss<-rep(12,ncol(test))
+for(i in 1:ncol(test)) {
+  miss[i]<-length(which(is.na(test[,i])))
+}
+test<-test[-c(which(is.na(test[,11]))),]
 #missing data has been removed
 
 #data sets for nice labels
@@ -53,6 +60,7 @@ xtable(tab3) #table for win/loss by overtime
 
 #model time
 train$ot<-as.factor(train$ot)
+test$ot<-as.factor(test$ot)
 mod1<-glm(winloss~ot*fgp+ot*tpp+ot*ftp+ot*todiff+ot*astdiff+ot*stldiff+
                ot*blkdiff+ot*pfdiff+ot*trdiff,data=train,family=binomial)
 mod2<-update(mod1,.~.-ot:tpp-ot:ftp-ot:astdiff-ot:stldiff-ot:blkdiff-ot:pfdiff,
@@ -72,3 +80,13 @@ colnames(tab5)<-c("Lower Bound","Estimate","Upper Bound")
 rownames(tab5)<-c("Intercept","Overtime","Field Goal %","Three Point %","Free Throw %","Turnovers","Assists","Steals","Blocks","Personal Fouls","Total Rebounds","Overtime:Field Goal %","Overtime:Turnovers","Overtime:Total Rebounds")
 xtable(tab5) #table for estimated odds ratios and 95% CI
 
+missclass<-function(mod){
+  p<-predict(mod,newdata=test,type="response")
+  for(i in 1:length(p)){
+    ifelse(p[i]>.5,p[i]<-1,p[i]<-0)
+  }
+  tab<-table(p,test$winloss)
+  miss<-1-sum(diag(tab)/sum(tab))
+}
+
+miss1<-missclass(mod2)
