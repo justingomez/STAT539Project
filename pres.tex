@@ -40,11 +40,11 @@
 	\begin{multicols}{2}
 		\begin{itemize}
 		\item College Basketball is a big deal! 
-		\item CBS paid 10 billion dollars to broadcast the NCAA Men's tournament in 2015. 
-		\item Institutional credibility and culture
+		\item CBS paid 10 billion dollars to broadcast the NCAA Men's tournament in 2015 
+		\item Institutional credibility and culture 
 		\item Student quality, retention
-		
-		
+		\item Winning teams change campus cultures
+				
 		
 	\end{itemize}
 \textbf{Key Question}:\textit{What factors are associated with winning home games? }
@@ -68,18 +68,38 @@
 	
 \section{Data}
 \begin{frame}{The Data}
-	Data are obtained from Kaggle.com's repository for the 2016 March Machine Learning Mania competition. Most of the people competing in this used predictive algorithms like random forests, etc. to predict outcomes. There were 
+	Data are obtained from Kaggle.com's repository for the 2016 March Machine Learning Mania competition. Most of the people competing in this used predictive algorithms like random forests, etc. to predict outcomes; however, we used a logistic regression GLM. 
 		\\
 		\begin{itemize}
-			\item Number of schools, etc.  
-			\item \textbf{Predictors}:  
-			
+			\item 14 seasons, every college basketball game played
+			\item More than 64,000 total games in the dataset  
+						
 		\end{itemize}
+	
+	\begin{figure}
+		\includegraphics[width = 200 pt]{C:/Users/Paul/Documents/STAT539Project/fakekobe}
+	\end{figure}
 	
 \end{frame}
 
 \begin{frame}{Variables}
+\textbf{Response variable}: 1 if Home team won the game, 0 if the home team lost\\
+Predictor variables are given as \textbf{differentials} (winning team stat - losing team stat) 
 
+	\begin{multicols}{2}
+		
+	\begin{itemize}
+		\item Free Throw Shooting Percentage
+		\item Overall Shooting Percentage
+		\item Three Point Shooting Percentage
+		\item Rebounds
+		\item Turnovers
+		\item Personal Fouls
+		\item Assists
+		\item Overtime (0 if not, 1 if yes)
+	\end{itemize}
+	
+\end{multicols}
 
 
 \end{frame}
@@ -94,50 +114,155 @@ Although the model is designed for inference, we believe that a good model ought
 	
 	\section{Methods}
 	
-	\begin{frame}{Logistic Regression}
+	\begin{frame}[t]{Logistic Regression}
 	Since the response is binary, we chose to fit a model with the \textbf{logit} link. We picked the logit link function for several reasons: 
 	\begin{itemize}
 		\item Logit - link allows for interpretation on probability scale
-		\item It did not make sense to model game outcomes on a latent variable scale
-		\item 		
+		\item Probit: It did not make sense to model game outcomes on a latent variable scale
+		
 	\end{itemize}
+\textbf{Systematic Component}: 
+\begin{eqnarray} \label{eq:logit}
+\centering
+logit(\pi_{i})=\beta_{0}+\sum_{j=1}^{p} \beta_{j}x_{ij}
+\end{eqnarray} 
+\textbf{Random Component}: 
+\begin{equation}
+\centering
+Y_i \sim Bern(\pi_i)
+\end{equation}
 	\end{frame}
 	
 
 	
 	
 \begin{frame}{Model Space}
-AIC comparisons etc. 
+We compared three models with AICs prior to choosing the final model. The table of models is below: 
+% latex table generated in R 3.3.2 by xtable 1.8-2 package
+% Mon Apr 24 19:33:35 2017
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{rrr}
+		\hline
+	model	& df & AIC \\ 
+		\hline
+		Full Interaction Model & 20.00 & 47813.61 \\ 
+		Reduced Interaction Model & 14.00 & 47803.16 \\ 
+		Additive Model & 11.00 & 47822.13 \\ 
+		\hline
+	\end{tabular}
+\end{table} 
+
+Based on the results obtained, we determined that the \textbf{Reduced Interaction Model} is most appropriate.
 \end{frame}
 	
 	
 \section{Results}
 
 	\begin{frame}{The Model}
+	The final theoretical model (reduced interaction model) is given below: 
+	\begin{multline} \label{eq:finalmodel}
+	logit(\pi_{i})=\beta_{0}+\beta_{1}ot_{i}+\beta_{2}fgp_{i}+\beta_{3}tpp_{i}+\beta_{4}ftp_{i}+\beta_{5}todiff_{i}+\beta_{6}astdiff_{i}+\beta_{7}stldiff_{i}\\
+	+\beta_{8}blkdiff_{i}+\beta_{9}pfdiff_{i}+\beta_{10}ot_{i}\times fgp_{i}+\beta_{11}ot_{i}\times todiff_{i} +\beta_{12}ot_{i}\times trdiff_{i}
+	\end{multline}
 \begin{itemize}
-	\item Estimates from the final model 
-	\item goodness of fit
+	\item Estimates shown on next page
+	\item Hosmer-Lemeshow test gives large p-value (0.245), indicating lack of evidence against poor fit
 \end{itemize}	
 \end{frame}	
 
+\begin{frame}{The Estimated Model}
+% latex table generated in R 3.3.2 by xtable 1.8-2 package
+% Mon Apr 24 19:39:03 2017
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{rrrr}
+		\hline
+		& Lower Bound & Estimate & Upper Bound \\ 
+		\hline
+		Intercept & 0.78 & 0.81 & 0.84 \\ 
+		Overtime & 0.99 & 1.10 & 1.23 \\ 
+		Field Goal \% & 0.18 & 0.26 & 0.37 \\ 
+		Three Point \% & 0.57 & 0.67 & 0.79 \\ 
+		Free Throw \% & 1.37 & 1.56 & 1.78 \\ 
+		Turnovers & 0.89 & 0.90 & 0.90 \\ 
+		Assists & 1.13 & 1.14 & 1.15 \\ 
+		Steals & 0.97 & 0.97 & 0.98 \\ 
+		Blocks & 1.15 & 1.16 & 1.17 \\ 
+		Personal Fouls & 0.86 & 0.87 & 0.87 \\ 
+		Total Rebounds & 1.03 & 1.03 & 1.04 \\ 
+		Overtime:Field Goal \% & 0.00 & 0.02 & 0.12 \\ 
+		Overtime:Turnovers & 1.03 & 1.06 & 1.09 \\ 
+		Overtime:Total Rebounds & 0.96 & 0.97 & 0.99 \\ 
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}	
+
+\begin{frame}{Some Interpretations}
+ 
+\begin{itemize}
+	\item \textbf{Three Point}: Holding other variables constant (including OT), in games where the winning team had one additional assist relative to the losing team's assists, the odds of the home team winning increased by between 13 and 15 percent. 
+	\item \textbf{Turnovers}: In games that did not go to overtime, and holding other variables constant, in games where the winning team had an additional turnover relative to the losing team, the odds of the home team winning decreased by between 10 and 11 percent. If the game went to overtime, that decrease in the odds of the home team winning actually \textit{increased} relative to non-OT games by 3 to 9 percent. 
+	
+
+\end{itemize}
+Most results lined up with what we expected. However, the estimate for Field Goal percentage was surprising. Possible issues multicollinearity could be an issue, or it may be that teams that shot fewer times also tended to have higher percentages even though they lost.  
+
+
+\end{frame}
+	
 	
 	
 \begin{frame}{Answering Research Questions}
+Recall our research questions: 
+
+\textbf{Which factors are most important in helping a home team win a game?}
+\begin{itemize}
+	\item All variables are statistically significant, but this is expected given large sample size
+	\item Additional Free Throws, Assists, Blocks and Rebounds increased the probability of the home team winning
+	\end{itemize}
+		
+\textbf{Do the effects of each covariate on the probability of winning change in games that go to overtime?}
+\begin{itemize}
+	\item The effects of Field Goal \%, Turnovers, and Total Rebounds appear to change in games that go to overtime
+\end{itemize}
+
+
 
 \end{frame}	
 
 \begin{frame}{Checking Prediction}
-Secondary goal of the analysis. 
+A good inferential model should also be able to predict reasonably well (although not well enough to beat out Random Forest methods, etc.). We tested the model against our testing set: 
+\begin{figure}
+	\centering
+	\includegraphics[height = 100pt]{C:/Users/Paul/Documents/STAT539Project/dorian}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Discussion}
-Final thoughts and further work
+\begin{itemize}
+\item The response in this analysis considers specifically the whether the home team won or lost. Using slightly different data, it would be interesting to consider covariates that are not differentiated with home/away as an indicator variable.  
 
+\item So many games were considered in this analysis, tests for significance may not be as meaningful as we'd like them to be. 
+\end{itemize}
+\begin{figure}
+	\centering
+	\includegraphics[height = 100pt]{C:/Users/Paul/Documents/STAT539Project/unibrow}
+\end{figure}
 \end{frame}
 
-\begin{frame}
-references
+\begin{frame}{References}
+\begin{thebibliography}{4}
+\bibitem{Advert}
+Smith, D. Randall. (2008) Big Time College Basketball and the Advertising Effect: Does Success Really Matter? \textit{Journal of Sports Economics} Volume 9 No. 4 pp 387-406.
+\bibitem{Econ}
+Ogus, Simon. (2016) The Economic Impact of March Madness From First Four to Final Four. \textit{Forbes}. 
+
+\bibitem{Agresti}
+Agresti, A. (2015). \textit{Foundations of Linear and Generalized Linear Models}. Somerset: Wiley.
+\end{thebibliography}
+
 \end{frame}
-	
 	
 \end{document}
