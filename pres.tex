@@ -61,6 +61,8 @@
 	Which factors are most important in helping a home team win a game?
 	\item %2
 	Do the effects of each covariate on the probability of winning change in games that go to overtime?
+	\item %3
+	Can winning at home be accurately predicted?
 \end{enumerate}
 	
 \end{frame}
@@ -68,7 +70,7 @@
 	
 \section{Data}
 \begin{frame}{The Data}
-	Data are obtained from Kaggle.com's repository for the 2016 March Machine Learning Mania competition. Most of the people competing in this used predictive algorithms like random forests, etc. to predict outcomes; however, we used a logistic regression GLM. 
+	Data are obtained from Kaggle.com's repository for the 2016 March Machine Learning Mania competition. %Most of the people competing in this used predictive algorithms like random forests, etc. to predict outcomes; however, we used a logistic regression GLM. 
 		\\
 		\begin{itemize}
 			\item 14 seasons, every college basketball game played
@@ -89,13 +91,15 @@ Predictor variables are given as \textbf{differentials} (winning team stat - los
 	\begin{multicols}{2}
 		
 	\begin{itemize}
-		\item Free Throw Shooting Percentage
-		\item Overall Shooting Percentage
+		\item Field Goal Percentage
 		\item Three Point Shooting Percentage
-		\item Rebounds
+		\item Free Throw Shooting Percentage
 		\item Turnovers
-		\item Personal Fouls
 		\item Assists
+		\item Steals
+		\item Blocks
+		\item Personal Fouls
+		\item Total Rebounds
 		\item Overtime (0 if not, 1 if yes)
 	\end{itemize}
 	
@@ -104,8 +108,25 @@ Predictor variables are given as \textbf{differentials} (winning team stat - los
 
 \end{frame}
 
+\begin{frame}{Data Summaries}
+	\centering
+	\includegraphics[height=.45\textheight]{percentbox.jpeg}\\
+	\vspace{-10pt}
+	\includegraphics[height=.5\textheight]{diffbox.jpeg}
+\end{frame}
+
+\begin{frame}{Data Summaries}
+	\centering
+	\includegraphics[height=.85\textheight]{toomanyboxes.jpeg}
+\end{frame}
+
 \begin{frame}{Prediction and Inference} 
-Although the model is designed for inference, we believe that a good model ought to be able to predict outcomes with a reasonable degree of accuracy. We split the data into 70-30 training-test sets. 
+Of secondary interest: how well does the GLM fitted to answer the first two research questions predict?
+\begin{itemize}
+	\item Training Split: 70\% of the data
+	\item Testing Split: Remaining 30\%
+	\item Miss-classification rate will be found on testing set
+\end{itemize}
 \begin{figure}[r]
 	\includegraphics[height = .5\textheight]{fakelebron.png}
 \end{figure}
@@ -134,39 +155,37 @@ Y_i \sim Bern(\pi_i)
 	\end{frame}
 	
 
-	
-	
 \begin{frame}{Model Space}
-We compared three models with AICs prior to choosing the final model. The table of models is below: 
-% latex table generated in R 3.3.2 by xtable 1.8-2 package
-% Mon Apr 24 19:33:35 2017
-\begin{table}[ht]
+Three models were considered:
+\begin{itemize}
+	\item Full Interaction Model: All ten main effects, and pairwise interactions with ot
+	\item Reduced Interaction Model: All main effects with only pairwise interactions between ot and field goals, turnovers, and total rebounds
+	\item Additive model: All ten main effects only
+\end{itemize}
+\begin{table}[h]
 	\centering
 	\begin{tabular}{rrr}
 		\hline
-	model	& df & AIC \\ 
+		& AIC & Change in AIC \\ 
 		\hline
-		Full Interaction Model & 20.00 & 47813.61 \\ 
-		Reduced Interaction Model & 14.00 & 47803.16 \\ 
-		Additive Model & 11.00 & 47822.13 \\ 
+		Reduced Interaction Model & 47803.16 & 0.00 \\ 
+		Full Interaction Model & 47813.61 & 10.45 \\ 
+		Additive Model & 47822.13 & 18.96 \\ 
 		\hline
 	\end{tabular}
-\end{table} 
-
-Based on the results obtained, we determined that the \textbf{Reduced Interaction Model} is most appropriate.
-\end{frame}
-	
+\end{table}
+\end{frame}	
 	
 \section{Results}
 
 	\begin{frame}{The Model}
-	The final theoretical model (reduced interaction model) is given below: 
-	\begin{multline} \label{eq:finalmodel}
-	logit(\pi_{i})=\beta_{0}+\beta_{1}ot_{i}+\beta_{2}fgp_{i}+\beta_{3}tpp_{i}+\beta_{4}ftp_{i}+\beta_{5}todiff_{i}+\beta_{6}astdiff_{i}+\beta_{7}stldiff_{i}\\
-	+\beta_{8}blkdiff_{i}+\beta_{9}pfdiff_{i}+\beta_{10}ot_{i}\times fgp_{i}+\beta_{11}ot_{i}\times todiff_{i} +\beta_{12}ot_{i}\times trdiff_{i}
-	\end{multline}
+	The final theoretical model (reduced interaction model): 
+	\begin{multline*}
+	logit(\pi_{i})=\beta_{0}+\beta_{1}ot_{i}+\beta_{2}fgp_{i}+\beta_{3}tpp_{i}+\beta_{4}ftp_{i}+\beta_{5}todiff_{i}+\\
+	\beta_{6}astdiff_{i}+\beta_{7}stldiff_{i}+\beta_{8}blkdiff_{i}+\beta_{9}pfdiff_{i}+\beta_{10}ot_{i}\times fgp_{i}\\
+	+\beta_{11}ot_{i}\times todiff_{i}+\beta_{12}ot_{i}\times trdiff_{i}
+	\end{multline*}
 \begin{itemize}
-	\item Estimates shown on next page
 	\item Hosmer-Lemeshow test gives large p-value (0.245), indicating lack of evidence against poor fit
 \end{itemize}	
 \end{frame}	
@@ -202,7 +221,7 @@ Based on the results obtained, we determined that the \textbf{Reduced Interactio
 \begin{frame}{Some Interpretations}
  
 \begin{itemize}
-	\item \textbf{Three Point}: Holding other variables constant (including OT), in games where the winning team had one additional assist relative to the losing team's assists, the odds of the home team winning increased by between 13 and 15 percent. 
+	\item \textbf{Assists}: Holding other variables constant (including OT), in games where the winning team had one additional assist relative to the losing team's assists, the odds of the home team winning increased by between 13 and 15 percent. 
 	\item \textbf{Turnovers}: In games that did not go to overtime, and holding other variables constant, in games where the winning team had an additional turnover relative to the losing team, the odds of the home team winning decreased by between 10 and 11 percent. If the game went to overtime, that decrease in the odds of the home team winning actually \textit{increased} relative to non-OT games by 3 to 9 percent. 
 	
 
@@ -262,6 +281,8 @@ Ogus, Simon. (2016) The Economic Impact of March Madness From First Four to Fina
 \bibitem{Agresti}
 Agresti, A. (2015). \textit{Foundations of Linear and Generalized Linear Models}. Somerset: Wiley.
 \end{thebibliography}
+\centering
+\includegraphics[height=100pt]{fakekobe2.jpg}
 
 \end{frame}
 	

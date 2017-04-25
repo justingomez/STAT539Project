@@ -44,6 +44,8 @@ Fans watching the NCAA Tournament are increasingly interested in making bets by 
 Which factors are most important in helping a home team win a game?
 \item %2
 Do the effects of each covariate on the probability of winning change in games that go to overtime?
+\item %3
+Can winning at home be accurately predicted?
 \end{enumerate}
 
 We focus mainly on the development of a binary regression model in order determine which factors may influence the probability of a home team winning a given game, and thus the main goal of this analysis is statsitical inference. However, since we are developing a model for the probability of the home team winning, evaluating the model's predictive ability is also of secondary interest. To do this, we split our full data set into two sets: a training set comprised of 70\% of the data, obatined through stratified random sampling by season; and a testing set comprised of the remaining 30\% of the data. We fit our generalized linear models on the training set, and then predict whether home teams won or lost using our testing data. Since we know the actual outcome of each game, we can find classification rates for our predictions to judge the performance of the model.
