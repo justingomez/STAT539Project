@@ -25,8 +25,8 @@ train2<-train[,c(12:17)] #for raw diffs
 colnames(train2)<-c("Turnovers","Assists","Steals","Blocks","Personal Fouls","T Rebounds")
 
 #boxplots for explanatory vars
-boxplot(train1,col=2:4,cex.axis=1.5) #named percentbox
-boxplot(train2,at=seq(1,10.5,1.75),col=2:7,xaxt="n",cex.axis=1.5) #named diffbox
+boxplot(train1,col=2:4,cex.axis=1.5,ylab="Difference in Percent",cex.lab=1.5) #named percentbox
+boxplot(train2,at=seq(1,10.5,1.75),col=2:7,xaxt="n",cex.axis=1.5,ylab="Difference in Count",cex.lab=1.5) #named diffbox
 xtick<-seq(1,10.5,1.75)
 axis(side=1,at=xtick,labels=FALSE)
 text(x=xtick,par("usr")[3],labels=colnames(train2),srt=13,pos=1,xpd=TRUE,cex=1.5,offset=1)

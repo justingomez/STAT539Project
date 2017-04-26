@@ -17,6 +17,7 @@
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{multicol}
+\usepackage{color}
 
 \title[NCAA Basketball]{Data Analysis: Winning in NCAA Basketball}
 \author{Justin Gomez \& Paul Harmon}
@@ -111,7 +112,7 @@ Predictor variables are given as \textbf{differentials} (winning team stat - los
 \begin{frame}{Data Summaries}
 	\centering
 	\includegraphics[height=.45\textheight]{percentbox.jpeg}\\
-	\vspace{-10pt}
+	\vspace{-15pt}
 	\includegraphics[height=.5\textheight]{diffbox.jpeg}
 \end{frame}
 
@@ -125,7 +126,7 @@ Of secondary interest: how well does the GLM fitted to answer the first two rese
 \begin{itemize}
 	\item Training Split: 70\% of the data
 	\item Testing Split: Remaining 30\%
-	\item Miss-classification rate will be found on testing set
+	\item Misclassification rate will be found on testing set
 \end{itemize}
 \begin{figure}[r]
 	\includegraphics[height = .5\textheight]{fakelebron.png}
@@ -158,7 +159,7 @@ Y_i \sim Bern(\pi_i)
 \begin{frame}{Model Space}
 Three models were considered:
 \begin{itemize}
-	\item Full Interaction Model: All ten main effects, and pairwise interactions with ot
+	\item Full Interaction Model: All ten main effects, and pairwise interactions with overtime
 	\item Reduced Interaction Model: All main effects with only pairwise interactions between ot and field goals, turnovers, and total rebounds
 	\item Additive model: All ten main effects only
 \end{itemize}
@@ -186,7 +187,7 @@ Three models were considered:
 	+\beta_{11}ot_{i}\times todiff_{i}+\beta_{12}ot_{i}\times trdiff_{i}
 	\end{multline*}
 \begin{itemize}
-	\item Hosmer-Lemeshow test gives large p-value (0.245), indicating lack of evidence against poor fit
+	\item Hosmer-Lemeshow test gives large p-value (0.245), indicating a lack of evidence of poor fit
 \end{itemize}	
 \end{frame}	
 
@@ -234,12 +235,12 @@ Most results lined up with what we expected. However, the estimate for Field Goa
 	
 	
 \begin{frame}{Answering Research Questions}
-Recall our research questions: 
+Recall our primary research questions: 
 
 \textbf{Which factors are most important in helping a home team win a game?}
 \begin{itemize}
 	\item All variables are statistically significant, but this is expected given large sample size
-	\item Additional Free Throws, Assists, Blocks and Rebounds increased the probability of the home team winning
+	\item Practically important variables: \textcolor{red}{field goals}, \textcolor{red}{three points}, \textcolor{blue}{free throws}, \textcolor{blue}{assists}, \textcolor{blue}{blocks}
 	\end{itemize}
 		
 \textbf{Do the effects of each covariate on the probability of winning change in games that go to overtime?}
@@ -252,7 +253,7 @@ Recall our research questions:
 \end{frame}	
 
 \begin{frame}{Checking Prediction}
-A good inferential model should also be able to predict reasonably well (although not well enough to beat out Random Forest methods, etc.). We tested the model against our testing set and found a miss-classification rate of 27.12\%. 
+A good inferential model should also be able to predict reasonably well (although not well enough to beat out Random Forest methods, etc.). We tested the model against our testing set and found a misclassification rate of 27.12\%. 
 \begin{figure}
 	\centering
 	\includegraphics[height = 100pt]{dorian.jpg}
@@ -261,8 +262,8 @@ A good inferential model should also be able to predict reasonably well (althoug
 
 \begin{frame}{Discussion}
 \begin{itemize}
-\item The response in this analysis considers specifically the whether the home team won or lost. Using slightly different data, it would be interesting to consider covariates that are not differentiated with home/away as an indicator variable.  
-
+\item The response in this analysis considers specifically whether the home team won or lost
+\item May be interesting to consider covariates that are not differentiated with home/away as an indicator variable (team level stats rather than game level)
 \item So many games were considered in this analysis, tests for significance may not be as meaningful as we'd like them to be. 
 \end{itemize}
 \begin{figure}
