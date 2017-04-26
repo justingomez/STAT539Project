@@ -48,7 +48,6 @@
 				
 		
 	\end{itemize}
-\textbf{Key Question}:\textit{What factors are associated with winning home games? }
 	\begin{figure}[r]
 		\includegraphics[height = .8\textheight]{hayward.jpg}
 	\end{figure}
@@ -57,11 +56,15 @@
 	\end{frame}
 
 \begin{frame}{Research Questions}
+Primary Interest:
 \begin{enumerate}
 	\item %1
 	Which factors are most important in helping a home team win a game?
 	\item %2
 	Do the effects of each covariate on the probability of winning change in games that go to overtime?
+\end{enumerate}
+Secondary Interest:
+\begin{enumerate} \addtocounter{enumi}{2}
 	\item %3
 	Can winning at home be accurately predicted?
 \end{enumerate}
@@ -87,7 +90,7 @@
 
 \begin{frame}{Variables}
 \textbf{Response variable}: 1 if Home team won the game, 0 if the home team lost\\
-Predictor variables are given as \textbf{differentials} (winning team stat - losing team stat) 
+Nine predictor variables are given as \textbf{differentials} (winning team stat - losing team stat) 
 
 	\begin{multicols}{2}
 		
@@ -112,7 +115,7 @@ Predictor variables are given as \textbf{differentials} (winning team stat - los
 \begin{frame}{Data Summaries}
 	\centering
 	\includegraphics[height=.45\textheight]{percentbox.jpeg}\\
-	\vspace{-15pt}
+	\vspace{-14pt}
 	\includegraphics[height=.5\textheight]{diffbox.jpeg}
 \end{frame}
 
@@ -144,15 +147,15 @@ Of secondary interest: how well does the GLM fitted to answer the first two rese
 		
 	\end{itemize}
 \textbf{Systematic Component}: 
-\begin{eqnarray} \label{eq:logit}
+\begin{eqnarray*} \label{eq:logit}
 \centering
 logit(\pi_{i})=\beta_{0}+\sum_{j=1}^{p} \beta_{j}x_{ij}
-\end{eqnarray} 
+\end{eqnarray*} 
 \textbf{Random Component}: 
-\begin{equation}
+\begin{equation*}
 \centering
 Y_i \sim Bern(\pi_i)
-\end{equation}
+\end{equation*}
 	\end{frame}
 	
 

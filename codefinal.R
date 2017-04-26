@@ -104,14 +104,15 @@ colnames(tab5)<-c("Lower Bound","Estimate","Upper Bound")
 rownames(tab5)<-c("Intercept","Overtime","Field Goal %","Three Point %","Free Throw %","Turnovers","Assists","Steals","Blocks","Personal Fouls","Total Rebounds","Overtime:Field Goal %","Overtime:Turnovers","Overtime:Total Rebounds")
 xtable(tab5) #table for estimated odds ratios and 95% CI
 
-missclass<-function(mod){
+misclass<-function(mod){
   p<-predict(mod,newdata=test,type="response")
   for(i in 1:length(p)){
     ifelse(p[i]>.5,p[i]<-1,p[i]<-0)
   }
   tab<-table(p,test$winloss)
-  miss<-1-sum(diag(tab)/sum(tab))
+  mis<-1-sum(diag(tab)/sum(tab))
 }
 
-miss1<-missclass(mod2)
-
+mis1<-misclass(mod1)
+mis2<-misclass(mod2)
+mis3<-misclass(mod3)
