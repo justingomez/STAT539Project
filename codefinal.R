@@ -25,24 +25,21 @@ train2<-train[,c(12:17)] #for raw diffs
 colnames(train2)<-c("Turnovers","Assists","Steals","Blocks","Personal Fouls","T Rebounds")
 
 #boxplots for explanatory vars
-boxplot(train1,col=2:4,cex.axis=1.5,ylab="Difference in Percent",cex.lab=1.5) #named percentbox
-boxplot(train2,at=seq(1,10.5,1.75),col=2:7,xaxt="n",cex.axis=1.5,ylab="Difference in Count",cex.lab=1.5) #named diffbox
+boxplot(train1,col=c("midnightblue","darkgreen","gold3"),cex.axis=1.5,ylab="Difference in Percent",cex.lab=1.5) 
+abline(h=0,lwd=3,lty=2) #named percentbox
+boxplot(train2,at=seq(1,10.5,1.75),col=c("darkred","gold2","blue3","purple","white","orangered"),xaxt="n",cex.axis=1.5,ylab="Difference in Count",cex.lab=1.5) #named diffbox
 xtick<-seq(1,10.5,1.75)
 axis(side=1,at=xtick,labels=FALSE)
 text(x=xtick,par("usr")[3],labels=colnames(train2),srt=13,pos=1,xpd=TRUE,cex=1.5,offset=1)
-
+abline(h=0,lwd=3,lty=2)
 
 #plots for winning/losing at home
-boxplot(fgp~winloss,data=train,xaxt="n",cex.axis=1.5)
-xtick<-seq(1,2,1)
-axis(side=1,at=xtick,labels=FALSE)
-text(x=xtick,par("usr")[3],labels=c("Regulation","Overtime"),srt=0,pos=1,xpd=TRUE,cex=1.5,offset=1)
-
 rtrain<-train[,c(7:17)]
 par(mfrow=c(3,3),mai = c(0.4, 0.3, 0.2, 0.1))
 titles<-c(colnames(train1),colnames(train2))
 for(i in 3:ncol(rtrain)) {
 boxplot(rtrain[,i]~winloss,data=train,xaxt="n",cex.axis=1.5,main=titles[i-2],col=c("lightblue","lightcoral"))
+abline(h=0,lwd=3,lty=2)
 xtick<-seq(1,2,1)
 axis(side=1,at=xtick,labels=FALSE)
 text(x=xtick,par("usr")[3],labels=c("Loss","Win"),srt=0,pos=1,xpd=TRUE,cex=1.5,offset=1)
