@@ -26,8 +26,7 @@
 \maketitle
 
 \begin{abstract}
-Winning College Basketball programs benefit from increased exposure, funding opportunities, and prestige. With a great deal riding on the success of the team's season, we analyze which aspects of the game contribute to the probability of a home team winning a game. We fit a logistic regression model to analyze data from 16,000 college basketball games since the 2003 season in order to determine which variables were most strongly associated with the probability of the home team winning. \par
-Results indicated evidence that Field Goal Percentage and Three Point Percentage Differentials were negatively associated with the probability that the home team would win a given game. Free Throw Percentage, Assist, and Block Differentials were positively associated with the probability of the home team winning. Finally, we find evidence that the effects of several variables, including FG Percentage, Total Rebounds, and Turnovers can change in games that go to overtime.  \\
+Winning College Basketball programs benefit from increased exposure, funding opportunities, and prestige. With a great deal riding on the success of the team's season, we analyze which aspects of the game contribute to the probability of a home team winning a game. We fit a logistic regression model to analyze data from 16,000 college basketball games since the 2003 season in order to determine which variables were most strongly associated with the probability of the home team winning. Results indicated evidence that Field Goal Percentage and Three Point Percentage Differentials were negatively associated with the probability that the home team would win a given game. Free Throw Percentage, Assist, and Block Differentials were positively associated with the probability of the home team winning. Finally, we find evidence that the effects of several variables, including FG Percentage, Total Rebounds, and Turnovers can change in games that go to overtime. \\
 \end{abstract}
 
 \doublespacing
@@ -166,7 +165,8 @@ The goals for this analysis are primarily inferential in nature; however, it is 
 \section{Discussion}
 The regression analysis indicates much of what we already know. Teams that score more points, turn the ball over less, and cut down on fouls tend to be more likely to win basketball games. In reference to the first question of interest, the factors that are most highly associated with winning had both small p-values and large effects on the odds of winning. Ultimately, higher Free Trow Percentages Assist, and Block Differentials were the most strongly and positively associated with the odds of the home team winning, with Field Goal and Three Point Percentage Differentials being negatively associated with the odds of the home team winning. 
 
-As an answer to question two, we have evidence that the effects of Field Goal Percentage Differential, Turnover Differential, and Total Rebound Differential appear to change in games that go to overtime.  For the final question, the inferential model predicted about 3 out of every 4 games correctly. Finally, these results should not be interpreted as causal. This methodology does not, however, illuminate how simultaneous increases on multiple covariates might impact the probability of winning, nor does it guarantee that a team that maximizes important predictors of winning will win. Because this analysis pertains only to games played at home, games inferences cannot be made to games played on neutral sites and should therefore not be used for prediction of NCAA Tournament games. 
+As an answer to question two, we have evidence that the effects of Field Goal Percentage Differential, Turnover Differential, and Total Rebound Differential appear to change in games that go to overtime.  For the final question, the inferential model predicted about three out of every four games correctly. Finally, these results should not be interpreted as causal. This methodology does not, however, illuminate how simultaneous increases on multiple covariates might impact the probability of winning, nor does it guarantee that a team that maximizes important predictors of winning will win. Because this analysis pertains only to games played at home, game inferences cannot be made to games played on neutral sites and should therefore not be used for prediction of NCAA Tournament games. 
+
 \newpage
 \section{References}
 \begin{thebibliography}
@@ -188,7 +188,7 @@ Smith, D. Randall. (2008) \textit{Big Time College Basketball and the Advertisin
 \end{thebibliogrpahy}
 \newpage
 \section{Appendix - R code}
-<<dataanalysis, eval = FALSE>>=
+<<dataanalysis, eval = FALSE,tidy.opts=list(width.cutoff=50),tidy=TRUE>>=
 #packages
 library(xtable)
 library(ResourceSelection)
@@ -246,7 +246,8 @@ ft<-c(min(train1[,3]),median(train1[,3]),mean(train1[,3]),max(train1[,3]))
 tab1<-data.frame(fg=round(fg,3),tp=round(tp,3),ft=round(ft,3))
 colnames(tab1)<-colnames(train1)
 rownames(tab1)<-c("Minimum","Median","Mean","Maximum")
-xtable(tab1) #table for percent summary stats
+xtable(tab1)
+#table for percent summary stats
 
 to<-c(min(train2[,1]),median(train2[,1]),mean(train2[,1]),max(train2[,1]))
 ast<-c(min(train2[,2]),median(train2[,2]),mean(train2[,2]),max(train2[,2]))
@@ -258,13 +259,15 @@ tab2<-data.frame(to=round(to,3),ast=round(ast,3),stl=round(stl,3),blk=round(blk,
                  pf=round(pf,3),tr=round(tr,3))
 colnames(tab2)<-colnames(train2)
 rownames(tab2)<-c("Minimum","Median","Mean","Maximum")
-xtable(tab2) #table for diff summary stats
+xtable(tab2) 
+#table for diff summary stats
 
 #summaries for x vars with response
 tab3<-addmargins(table(as.factor(train$winloss),as.factor(train$ot)))
 colnames(tab3)<-c("Regulation","Overtime","Total")
 rownames(tab3)<-c("Loss","Won","Total")
-xtable(tab3) #table for win/loss by overtime
+xtable(tab3) 
+#table for win/loss by overtime
 
 #model time
 train$ot<-as.factor(train$ot)
@@ -273,10 +276,12 @@ mod1<-glm(winloss~ot*fgp+ot*tpp+ot*ftp+ot*todiff+ot*astdiff+ot*stldiff+
                ot*blkdiff+ot*pfdiff+ot*trdiff,data=train,family=binomial)
 mod2<-update(mod1,.~.-ot:tpp-ot:ftp-ot:astdiff-ot:stldiff-ot:blkdiff-ot:pfdiff,
              data=train)
-anova(mod2,mod1,test="LRT") #looks like we want them model with 3 interactions
+anova(mod2,mod1,test="LRT") 
+#looks like we want them model with 3 interactions
 #what about additive effects model?
 mod3<-update(mod2,.~.-ot:fgp-ot:todiff-ot:trdiff,data=train)
-anova(mod3,mod2,test="LRT") #only main effects would be a bad idea I guess
+anova(mod3,mod2,test="LRT") 
+#only main effects would be a bad idea I guess
 
 tab4<-AIC(mod2,mod1,mod3) #model 2 wins!
 tab4<-data.frame(tab4,diff=c(tab4[1,2]-tab4[1,2],tab4[2,2]-tab4[1,2],tab4[3,2]-tab4[1,2]))
@@ -290,7 +295,8 @@ ci<-confint(mod2)
 tab5<-data.frame(low=round(exp(ci[,1]),3),est=round(exp(summary(mod2)$coefficients[,1]),3),up=round(exp(ci[,2]),3))
 colnames(tab5)<-c("Lower Bound","Estimate","Upper Bound")
 rownames(tab5)<-c("Intercept","Overtime","Field Goal %","Three Point %","Free Throw %","Turnovers","Assists","Steals","Blocks","Personal Fouls","Total Rebounds","Overtime:Field Goal %","Overtime:Turnovers","Overtime:Total Rebounds")
-xtable(tab5) #table for estimated odds ratios and 95% CI
+xtable(tab5) 
+#table for estimated odds ratios and 95% CI
 
 misclass<-function(mod){
   p<-predict(mod,newdata=test,type="response")
